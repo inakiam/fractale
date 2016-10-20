@@ -31,8 +31,6 @@ class CSpace(object):
 
         modulus = self.rgb.index(rgbMax)
 
-        #formula = False if (chroma == 0) else modulus
-
         if chroma == 0:
             hue = False
         else:

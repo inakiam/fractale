@@ -2,6 +2,7 @@
 #set of useful concepts for working with graphs
 
 from decimal import *
+from math import *
 
 def toPPX(header,mode,content,width,height,
           comment='Godiva. Fractal. Popcorn.',fname="Output",depth=8):
@@ -250,6 +251,114 @@ def fComplex(inComplex):
 
     return output
 
+def count(s):
+    acc = {}
+
+    for i in s:
+
+        try:
+            acc[i] += 1
+
+        except:
+            acc[i] = 1
+            
+    return acc
+
+def ci(a,l):
+
+    a = [111,121,134,154,156,200,222,143,165,217]
+
+    n = len(a)
+    sA = sum(a)
+    µ = sA/n
+
+    sAA = [a - µ for i in a]
+
+    stDev = sqrt(sAA**2/n)
+
+    err = 0.5 * l * stDev/sqrt(n)
+
+    
+    
+
+def mn(a):
+    return sum(a)/len(a)
+
+def okk(s):
+    
+    s = s.replace(',','').replace(' ','').replace('!','').replace('?','')
+    s = ["0" if i is "o" else "1" for i in s.lower()]
+    s = [int(''.join(s[i:i+8])) for i in range(0,len(s),8)]
+
+    
+    
+    return s
+
+def add(a,b, rad = 2):
+
+    l = [len(a),len(b)]
+    s = list("0" * (1 + l[0] if l[0] > l[1] else 1 + l[1]))
+    d = 1
+
+    rad = {i:str(i) for i in rad}
+
+    if l[0] < l[1]:
+        a = "0" * (l[1] - l[0]) + a
+    elif l[1] < l[0]:
+        b = "0" * (l[0] - l[1]) + b
+
+
+    def pv(num,summ,i):
+
+        if (num[i] is "1") and (summ[i] is "1"):
+
+            p = "1"
+            while p is "1":
+                summ[i] = "0"
+                
+                if summ[i - 1] is "1":
+                    i -= 1
+                else:
+                    summ[i - 1] = "1"
+                    p = "0"
+
+        elif (num[i] is "1") and (summ[i] is "0"):
+              summ[i] = num[i]
+
+        return summ
+
+
+
+
+
+    for i in range(-1,-(len(a) + 1),-1):
+        s = pv(a,s,i)
+        s = pv(b,s,i)
+        d = i if s[i] is "1" else i - 1 if s[i - 1] is "1" else d
+    
+    d = d if d < 1 else -1
+    
+    return ''.join(s[d:])
+
+def dirReduc(arr):
+    
+    names = {'NORTH':1,'SOUTH':-1,'EAST':2,'WEST':-2}
+    complete = False
+
+    while not(complete):
+
+        for i in range(len(arr) - 1):
+            if names[arr[i]] + names[arr[i+1]] == 0: 
+                arr = arr[:i] + arr[i+2:]
+                break
+            
+            if i+1 == len(arr) -1:
+                complete = True
+
+        if len(arr) == 1 or len(arr) == 0: complete = True
+    
+    return arr
+
 
 def sieve(ceiling): #Sieve of Eratosthenes
 
@@ -290,6 +399,20 @@ def e(precis):
 
     return e
 
+def going(n):
+    
+    def prod(x):
+        n = 1
+        for i in x: n*=i
+        return n
+    
+    n = [i for i in range(n + 1)][1:]
+    n = [prod(n[:i+1]) for i in range(len(n))]
+    inv = 1/n[-1]
+        
+    
+    return  sum(n)*inv
+
 def factorial(n):
 	out = 1
 	for i in range(1,n):
@@ -322,6 +445,15 @@ def arborial(arbs):
     for i in arbs: a *= i
 
     return a
+
+def gdigs(digits,base):
+
+    x = base
+
+    for i in range(digits):
+        x=pow(base,x,10**digits)
+
+    return "0%d"%x
 
 #Makes sure a given string will be as long as scandepth by adding leading 0's
 

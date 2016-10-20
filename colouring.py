@@ -60,7 +60,6 @@ class Colouring(object):
 
         return self.interpolate(z.real - abs(z.imag))
 
-        #return self.pallet[int(z.real - abs(z.imag))%len(self.pallet)]
 
     ###Exterior-only
     def eta(self,z,escTime,itr,c):
@@ -85,7 +84,6 @@ class Colouring(object):
         b = abs(z)
 
         rgb = [i/(r+g+b) for i in [r,g,b]]
-#int(255*(2- n)/2)%256
         self.CSpace.setRGB(rgb)
         self.CSpace.rgb2hsv()
         self.CSpace.hsv[2] = sum(rgb)-self.CSpace.hsv[2]
@@ -110,7 +108,17 @@ class Colouring(object):
 
         return self.etaSm(z,i,0,0)
 
-    '''This is where the init and seedvars are.''' 
+    def cPic(self,n):
+
+    if n==0: function = self.mono
+    elif n==1: function = self.eta
+    elif n==2: function = self.negarc
+    elif n==3: function = self.etaSm
+    elif n == 4: function = obj.arcinv
+    elif n==92271: function = self.expy
+
+    return function
+
     #Algorithm Control Vars
     pal = 0
     inside = 0
@@ -164,96 +172,8 @@ class Colouring(object):
 
         self.inside = inside
 
-    def updateMulti(self,**kargs):
+    def updateMulti(self,**):
 
-        for i in kargs: setattr(self,i,kargs[i])
+        for i in **: setattr(self,i,**[i])
 
         self.__init__()
-        
-
-    #CA Switches.
-##    def setoutsideC(self):
-##
-##        if algorithm == 0: #Low kolgomorov scheme; border analysis
-##            return self.mono
-##
-##        elif algorithm == 1: #Escape-Time
-##
-##            return self.eta
-##
-##        elif algorithm == 2: #ET + Comps of Z
-##            
-##            return pal[int(z.real+z.imag+escTime)%len(pal)]
-##
-##        elif algorithm == 3: #Seems to operate a bit like NIC?
-##
-##            return pal[int((abs(z)+escTime)*2)%len(pal)]
-##
-##        elif algorithm == 4: #Truth tables, maybe?
-##
-##            return pal[((int(z.real) ^ int(abs(z.imag)))//escTime)%len(pal)]
-##
-##        elif algorithm == 92271: #Experimental
-##
-##            return pal[int(z.real - abs(z.imag))%len(pal)]
-##
-##            #Ringlike Structures. Seems to show "boundaries".
-##            #pal[int(abs(z)*1000)%len(pal)]
-##
-##        
-##
-##
-##def colour(algorithm,z,escTime,itr):
-##
-##    
-##
-##    if escTime < itr:
-##        #Exterior Colouring
-##        
-##        if algorithm == 0: #Low kolgomorov scheme; border analysis
-##            return [255,255,255]
-##        
-##        elif algorithm == 1: #Escape-Time
-##
-##            return pal[escTime%(len(pal))]
-##
-##        elif algorithm == 2: #ET + Comps of Z
-##            
-##            return pal[int(z.real+z.imag+escTime)%len(pal)]
-##
-##        elif algorithm == 3: #Seems to operate a bit like NIC?
-##
-##            return pal[int((abs(z)+escTime)*2)%len(pal)]
-##
-##        elif algorithm == 4: #Truth tables, maybe?
-##
-##            return pal[((int(z.real) ^ int(abs(z.imag)))//escTime)%len(pal)]
-##
-##        elif algorithm == 92271: #Experimental
-##
-##            return pal[int(z.real - abs(z.imag))%len(pal)]
-##
-##            #Ringlike Structures. Seems to show "boundaries".
-##            #pal[int(abs(z)*1000)%len(pal)]
-##        
-##                
-##    else:
-##        #Interior Colouring
-##        return [0,0,0]
-##
-##
-##
-###Pallets
-##
-##def pale(indice,rot=0):
-##
-##    '''Output a pallet. Optionally allows rotation.
-##       Rotation DOES NOT take negatives.'''
-##
-##
-##    output = pals[indice][rot%len(pals[indice]):] +\
-##             pals[indice][:rot%len(pals[indice])]
-##    
-##    return output
-##
-##pal = pale(2)
