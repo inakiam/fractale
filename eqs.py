@@ -1,6 +1,6 @@
 #Factal Eqs
 
-eqs = [mandelbrot,sakura,mBar,bShip,bSaku,sinBrot,duck,apollyon,kel]
+#eqs = [mandelbrot,sakura,mBar,bShip,bSaku,sinBrot,duck,apollyon,kel]
 
 def mandelbrot(z,c,pwr,itr,limit,j = False,ex = False,i=0):
 

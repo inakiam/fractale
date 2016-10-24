@@ -110,14 +110,14 @@ class Colouring(object):
 
     def cPic(self,n):
 
-    if n==0: function = self.mono
-    elif n==1: function = self.eta
-    elif n==2: function = self.negarc
-    elif n==3: function = self.etaSm
-    elif n == 4: function = obj.arcinv
-    elif n==92271: function = self.expy
+        if n==0: function = self.mono
+        elif n==1: function = self.eta
+        elif n==2: function = self.negarc
+        elif n==3: function = self.etaSm
+        elif n == 4: function = obj.arcinv
+        elif n==92271: function = self.expy
 
-    return function
+        return function
 
     #Algorithm Control Vars
     pal = 0
@@ -172,8 +172,8 @@ class Colouring(object):
 
         self.inside = inside
 
-    def updateMulti(self,**):
+    def updateMulti(self,**kargs):
 
-        for i in **: setattr(self,i,**[i])
+        for i in kargs: setattr(self,i,kargs[i])
 
         self.__init__()

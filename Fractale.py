@@ -5,7 +5,7 @@ import random
 
 #Custom Functions
 from cTools import toPPX,tBaseN,e
-from mathtricks import *
+#from mathtricks import *
 from eqs import *
 
 #Builtin Functions
