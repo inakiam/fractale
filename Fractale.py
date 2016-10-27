@@ -1,6 +1,7 @@
 ##Custom Classes
 from graph import Graph
 from colouring import Colouring
+from output import PPX
 import random
 
 #Custom Functions
@@ -93,12 +94,16 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
 
     #Set up the graph for rendering.
     plane.updateRes(resX,resY)
-    plane.updateMulti(epicentre=[0.5,0],magnitude=3)
+    plane.updateMulti(epicentre=[-.75,0],magnitude=0)
 
     #Set up colouring algorithm for colouring.
     colour.updateMulti(pal=3)
-    cinter = colour.cPic(colour,4)
-    couter = colour.cPic(colour,3)
+    cinter = colour.cPic(4)
+    couter = colour.cPic(3)
+
+    #Set up output container.
+    out = PPX()
+    out.setMost(3,1,resX,resY,'Output')
 
     #Assign function to be called
     fSet = eqs[fSet]
@@ -112,7 +117,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
             c = complex(plane.posX, plane.posY) + cBase
             z = zBase
 
-            z = renderMethod(z,c,pwr,itr,limit,julia)
+            z = fSet(z,c,pwr,itr,limit,julia)
 
             z,escTime = z[-1],len(z)-1
 
@@ -124,11 +129,13 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
 
         plane.posX = plane.reset[0]
         plane.posY += plane.fsY
+        out.write(output)
+        output = []
 
-        if opt and plane.posY > 0:
-            #best case div rendertime/2
-            output += symmetry(output,julia,y,resY,resX)
-            break
+##        if opt and plane.posY > 0:
+##            #best case div rendertime/2
+##            output += symmetry(output,julia,y,resY,resX)
+##            break
 
     return output
 
@@ -136,7 +143,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
 
 def run(x,y, fSet):
 
-    output = calculate(fSet,2,80,0,(0j),(0+0j),True,x,y)
+    output = calculate(fSet,2,80,0,(0j),(0+0j),False,x,y)
     print("Render Complete. Writing to file...")
     toPPX(3,True,output,x,y,fname = 'Renders/render')
     print("Done.")

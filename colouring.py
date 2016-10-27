@@ -114,7 +114,7 @@ class Colouring(object):
         elif n==1: function = self.eta
         elif n==2: function = self.negarc
         elif n==3: function = self.etaSm
-        elif n == 4: function = obj.arcinv
+        elif n == 4: function = self.arcinv
         elif n==92271: function = self.expy
 
         return function

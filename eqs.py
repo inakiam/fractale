@@ -1,6 +1,5 @@
 #Factal Eqs
 
-#eqs = [mandelbrot,sakura,mBar,bShip,bSaku,sinBrot,duck,apollyon,kel]
 
 def mandelbrot(z,c,pwr,itr,limit,j = False,ex = False,i=0):
 
@@ -162,3 +161,5 @@ def apollyon(z,c,pwr,itr,limit,j = False,ex = False,i=0):
         i += 1
 
     return z,i
+
+eqs = [mandelbrot,sakura,mBar,bShip,bSaku,sinBrot,duck,apollyon,kel]

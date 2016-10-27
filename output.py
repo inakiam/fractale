@@ -107,7 +107,7 @@ class PPX(object):
 
 
 
-a = PPX();a.setMost(1,1,3,3,'k');a.write([1,0,1]);a.write([1,0,1]);a.write([0,1,0])
+#a = PPX();a.setMost(1,1,3,3,'k');a.write([1,0,1]);a.write([1,0,1]);a.write([0,1,0])
 
 ##        file.write("\n")
 ##
