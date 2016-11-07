@@ -24,13 +24,14 @@ Spaces are OK. The program can deal with them.
 
 If you want to write a power, "^" and "\*\*" are supported. z\*\*2 and z^2 wll both square z.
 
-Some extra functions are supporte:
+Some extra functions are supported:
 
 *The three main trig functions - sin, cos, tan - and their hyperbolic equivalents, as will as the inverse functions of all of those
 *Natural logartihm w/ log(number)
 **Unnatural log via log(number,base) - may cause accusations of blasphemy
 *exp and sqrt, if you want them
-*Some useful constants - pi, e,
+
+You can also refer to some useful transcendentals - pi, e,
 
 ##Animating
 
