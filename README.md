@@ -7,25 +7,28 @@ I don't particularly care about how nice looking the codebase is, so prepare for
 
 #Documentation
 
+THIS DOCUMENTATION IS WRITTEN FOR A LATER VERSION. FRACTALE DOES NOT YET WORK.
+
+
 ##Writing a custom formula
 
 You can use the follwing variables:
 
 z, c, and p
 
-If you are multiplying, always type the "*" explicitly! Algebraic expression of coefficients is not *yet* supported. If you write 2(z) or 2z, it won't work.
+If you are multiplying, always type the "\*" explicitly! Algebraic expression of coefficients is not *yet* supported. If you write 2(z) or 2z, it won't work.
 
-Typing "x" to multiply will *never* be supported. Typing 2xZ will cause an error. Type 2*Z
+Typing "x" to multiply will *never* be supported. Typing 2xZ will cause an error. Type 2\*Z
 
 Spaces are OK. The program can deal with them.
 
-If you want to write a power, "^" and "**" are supported. z**2 and z^2 wll both square z.
+If you want to write a power, "^" and "\*\*" are supported. z\*\*2 and z^2 wll both square z.
 
 Some extra functions are supporte:
 
-* The three main trig functions - sin, cos, tan - and their hyperbolic equivalents, as will as the inverse functions of all of those
-* Natural logartihm w/ log(number)
-** Unnatural log via log(number,base)
+*The three main trig functions - sin, cos, tan - and their hyperbolic equivalents, as will as the inverse functions of all of those
+*Natural logartihm w/ log(number)
+**Unnatural log via log(number,base) - may cause accusations of blasphemy
 *exp and sqrt, if you want them
 *Some useful constants - pi, e,
 
@@ -39,13 +42,13 @@ Terms and subterms have adresses. These adresses count from zero.
 
 Example:
 
-Formula:    z^2 + z + cos(c - tan(z))
-Term Addr:  0     1   2   2   2   2
-                          .   .   .
-						  0   1   1
-								  .
-								  0
-
+    Formula:    z^2 + z + cos(c - tan(z))
+    Term Addr:  0     1   2   2   2   2
+                              .   .   .
+    						  0   1   1
+    								  .
+    								  0
+    
 So, to refer to the z inside tan(z) by adress, you call it term 2.1.0
 
 This numerical adress system is used because it gives every part of the equation a unique address. This means you can refer to term 1 - "z" and term 2.1.0 (also "z") separately. This grants you total fine control over the contents of the formula.
@@ -72,11 +75,11 @@ This behaviour is necessary to ensure every transformation actually completes in
 
 ###Interpolation
 
-Interpolation is how Fractale allows you to transform fractals. The basic concept is this - if z^2 + c is the mandelbrot set, and |z|^2 + c is the mandelbar set, then the addition of the sets is z^2 + |z|^2 + c
+Interpolation is how Fractale allows you to transform fractals. The basic concept is this - if z^2 + c is the mandelbrot set, and z̄^2 + c is the mandelbar set, then the addition of the sets is z^2 + z̄^2 + c
 
 (We don't have 2c or c + c because the variable c represents the complex plane. z represents the fractal. We want to add the fractals, but not the plane, here.)
 
-let's add two variables - a, and b. a will quantify *how much mandelbrot* we want, and b will quantify how much *mandelbar* we want. This gives us a * z^2 + b * |z|^2 + c.
+let's add two variables - a, and b. a will quantify *how much mandelbrot* we want, and b will quantify how much *mandelbar* we want. This gives us a * z^2 + b * z̄^2 + c.
 
 If we set a = 2, and b = 1, we say we want twice the mandelbrot set for every one of the mandelbar we get.
 

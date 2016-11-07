@@ -3,6 +3,33 @@ t2 = "z+(z*z + z)+z"
 t3 = "z+sin(z*z + z)+z"
 t4 = "z-sin(z*z + z)**2+z"
 
+def construct(rSet):
+
+    out = ""
+
+    for i in rSet:
+
+        if i[1] is None:
+
+            out += i[0] + "+"
+
+        else:
+
+            out += i[0][:i[0].find("(") + 1] + construct(i[1]) + i[0][
+                i[0].find(")"):] + "+"
+
+    return out[:len(out) - 1].replace("+-","-")
+
+def addAnim(rSet, anim, addr):
+
+    if addr.find(".") is -1:
+
+        rSet[int(addr)] += anim
+        
+    else:
+        addAnim(rSet[addr.find('.')][1],anim,addr[addr.find('.') + 1:])
+    
+
 def readSubs(rSet,addr):
 
     if addr.find(".") is -1:
@@ -164,5 +191,5 @@ def fndTerms(eq):
 ##a = findTerms(t1)
 ##b = findTerms(t2)
 c = findTerms(t3)
-##d = findTerms(t4)
+d = findTerms(t4)
 
