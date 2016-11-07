@@ -75,8 +75,8 @@ class CSpace(object):
                 reRGB[ceil(-i+1/2)%3] = dichroma
                 reRGB[ceil((3+i)/2)%3] = 0
 
-        self.rgb = [ceil(colors+rgbMin) for colors in reRGB]
+        a = [colors+rgbMin for colors in reRGB]
         
-        return self.rgb
+        return a
 
 

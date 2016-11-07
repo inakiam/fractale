@@ -1,11 +1,11 @@
 #Factal Eqs
 
 
-def mandelbrot(z,c,pwr,itr,limit,j = False,ex = False,i=0):
+def mandelbrot(z,c,pwr,itr,limit,j = False,ex = False,i=0,transform=None):
 
     '''Mandelbrot/Julia ETA.'''
 
-    z=[z]
+    z = [0]
     zenith = 1
 
     if j: z,c = c,z 
@@ -128,6 +128,17 @@ def duck(z,c,pwr,itr,limit,j = False,ex = False,i=0):
 
     return z,i
 
+class Formula(object):
+
+    z = 0
+    c = 0
+    pwr = 0
+    itr = 0
+    limit = 0
+    j = False
+    ex = False
+    i = 0
+
 def kel(z,c,pwr,itr,limit,j = False,ex = False,i=0):
 
     '''Burning Ship ETA.'''
@@ -162,4 +173,33 @@ def apollyon(z,c,pwr,itr,limit,j = False,ex = False,i=0):
 
     return z,i
 
+def superset(z,c,pwr,itr,limit, j = False,ex = False, i = 0):
+
+    output = calculate(fSet,pwr,itr,False if julia else True,0,0,True,10,10)
+
+    for vals in range(len(output)):
+        rgb[vals%3] += output[vals]
+
+    return [int(rgb[i]/(len(output)/3)) for i in range(len(rgb))]
+    
+
 eqs = [mandelbrot,sakura,mBar,bShip,bSaku,sinBrot,duck,apollyon,kel]
+
+
+
+from random import random
+def estimate():
+    a = 0
+    b = 0
+    c = []
+    while True:
+        a +=1 if len(mandelbrot(0,complex(random()*3 - 2,random()*2.5 - 1.25),2,80,4)) is 81 else 0
+        b+=1
+        if b%1000000 == 0:
+            c += [a/b * 3*2.5]
+            a = 0
+            b = 0
+            if len(c) % 5 == 0:
+                print(sum(c)/len(c))
+
+    return a/b

@@ -73,7 +73,7 @@ def symmetry(rawIn,julia,yNow,yFinal,x):
 #Main calculation function
 #Run the colouring algo before using symmetry. Fucking seriously. It's faster.
 
-def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
+def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform):
 
     '''ETA Fractal Calculator.
     fSet defines formulas; see function ePic for details.
@@ -98,12 +98,12 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
 
     #Set up colouring algorithm for colouring.
     colour.updateMulti(pal=3)
-    cinter = colour.cPic(4)
-    couter = colour.cPic(3)
+    cinter = colour.cPic(92271)
+    couter = colour.cPic(4)
 
     #Set up output container.
     out = PPX()
-    out.setMost(3,1,resX,resY,'Output')
+    out.setMost(3,1,resX,resY,'Output'+str(n))
 
     #Assign function to be called
     fSet = eqs[fSet]
@@ -117,7 +117,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
             c = complex(plane.posX, plane.posY) + cBase
             z = zBase
 
-            z = fSet(z,c,pwr,itr,limit,julia)
+            z = fSet(z,c,pwr,itr,limit,julia,transform=transform)
 
             z,escTime = z[-1],len(z)-1
 
@@ -129,6 +129,8 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
 
         plane.posX = plane.reset[0]
         plane.posY += plane.fsY
+
+
         out.write(output)
         output = []
 
@@ -143,7 +145,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY):
 
 def run(x,y, fSet):
 
-    output = calculate(fSet,2,80,0,(0j),(0+0j),False,x,y)
+    output = calculate(fSet,2,80,0,(0j),(0+0j),False,x,y,"Q",lambda c:c)
     print("Render Complete. Writing to file...")
     toPPX(3,True,output,x,y,fname = 'Renders/render')
     print("Done.")

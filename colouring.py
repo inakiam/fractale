@@ -78,12 +78,14 @@ class Colouring(object):
     #Experimental
 
     def arcinv(self, z, escTime, itr, c):
-    
+
+        z = (cmath.log( cmath.log(z) /
+                                            cmath.log(2) ) / cmath.log(2))
         r = abs(z.real)
         g = abs(z.imag)
         b = abs(z)
 
-        rgb = [i/(r+g+b) for i in [r,g,b]]
+        rgb = [i for i in [r,g,b]]
         self.CSpace.setRGB(rgb)
         self.CSpace.rgb2hsv()
         self.CSpace.hsv[2] = sum(rgb)-self.CSpace.hsv[2]
@@ -92,7 +94,7 @@ class Colouring(object):
 
     def expy(self, z, escTime, itr, c):
 
-        c = (z/abs(z))*.65
+        c = (z/abs(z))*.255 - 1
         z = 0
         zenith = 1
         i=0
