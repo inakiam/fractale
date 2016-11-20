@@ -108,7 +108,7 @@ class Colouring(object):
 
         
 
-        return self.etaSm(z,i,0,0)
+        return self.arcinv(z,i,0,0)
 
     def cPic(self,n):
 

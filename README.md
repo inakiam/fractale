@@ -26,10 +26,10 @@ If you want to write a power, "^" and "\*\*" are supported. z\*\*2 and z^2 wll b
 
 Some extra functions are supported:
 
-*The three main trig functions - sin, cos, tan - and their hyperbolic equivalents, as will as the inverse functions of all of those
-*Natural logartihm w/ log(number)
-**Unnatural log via log(number,base) - may cause accusations of blasphemy
-*exp and sqrt, if you want them
+* The three main trig functions - sin, cos, tan - and their hyperbolic equivalents, as will as the inverse functions of all of those
+* Natural logartihm w/ log(number)
+** Unnatural log via log(number,base) - may cause accusations of blasphemy
+* exp and sqrt, if you want them
 
 You can also refer to some useful transcendentals - pi, e,
 
@@ -54,15 +54,15 @@ So, to refer to the z inside tan(z) by adress, you call it term 2.1.0
 
 This numerical adress system is used because it gives every part of the equation a unique address. This means you can refer to term 1 - "z" and term 2.1.0 (also "z") separately. This grants you total fine control over the contents of the formula.
 
-To animate the fractal, you transform the formula over time. In the future, cuesheet files will be supported for this. For the time being, do so by using the AddAnim function. The format for this function is a string containing the address of the term you want to alter, and a list of tuples containing the specifications for the alterations.
+To animate the fractal, you transform the formula over time. In the future, cuesheet files will be supported for this. For the time being, do so by using the addAnim function. The format for this function is a string containing the address of the term you want to alter, and a list of tuples containing the specifications for the alterations.
 
-The tuples are formatted as follows:
+Ex: addAnim("3.1", [ ("z",0,0,1) , ("c/z",0,1,5) , ... , (z^log(z),1,9971,20000 ] )
 
-(term, interpolationMethod, startTime, endTime)
+The tuples are formatted as follows: (term, interpolationMethod, startTime, endTime)
 
 The term is just a string containing what you want the element to change to.
 
-The interpolation method is how you want Fractale to transform the term into the other. Two methods are presently supported - linear, and trigonometric. THese are discussed in detail at the end of this segment.
+The interpolation method is how you want Fractale to transform the term into the other. Two methods are presently supported - linear, and trigonometric. These are discussed in detail at the end of this segment.
 
 The start time tells fractale when it should start the transformation. The start time of at least *one* transformation in your animation must be zero, for now. (actually, it doesn't, but unless you want to waste time and compute resources, should make sure to do this so fractale doesn't render the same fractal 30 times in a row)
 
@@ -73,6 +73,7 @@ Times are specified in seconds, and while Fractale will make all due efforts to 
 So if you shot a transformation at 4 frames per second, and specifed a transform would start at zero and end at 2.76 seconds, fractale would render eleven frames, and produce a 2.75 second video.
 
 This behaviour is necessary to ensure every transformation actually completes in a frame that fractale renders. If the program didn't work like this, and if a transformation completed betwen rendered frames, it could seem to "snap" between complete and incomplete with noticeable jerking.
+
 
 ###Interpolation
 
@@ -98,16 +99,7 @@ In addtion to this linear method, fractale also supports a sinusoidal method, wh
 
 The linear method had constant speed throughout.
 
-
-
-
-### Linear Transform
-
-
-
-An example call: addAnim("3.1", [ ("z",0,0,1) , ("c/z",0,1,5) , ... , (z^log(z),1,9971,20000 ] )
-
-This call asks the rederer to animate term 3.1. 
+Other methods are being considered; most especially ones that feature dynamic speed adjustment based on what you are doing to the terms to make transformations that don't proceed linearly, do so. For example, if you move from a z^2 mandelbrot to z^6, you will notice that most of the animation is spent in a "mostly z^6-ish shape" increase the difference between powers, and eventually, you reach a stage where every fram of the animation seems to be nothing but the higher power version, except for the first.
 
 
 ##License

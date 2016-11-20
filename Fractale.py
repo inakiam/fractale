@@ -108,6 +108,8 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform):
     #Assign function to be called
     fSet = eqs[fSet]
 
+    ret = open("mandeldump.big","w")
+
     #Iterate over the space.
     for y in range(resY):
 
@@ -119,26 +121,29 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform):
 
             z = fSet(z,c,pwr,itr,limit,julia,transform=transform)
 
-            z,escTime = z[-1],len(z)-1
+            ret.write(str(z))
 
-            if escTime == itr:
-                output += cinter(z,escTime,itr,c)
-            else: output += couter(z,escTime,itr,c)
+            #z,escTime = z[-1],len(z)-1
+
+            #if escTime == itr:
+               # output += cinter(z,escTime,itr,c)
+            #else: output += couter(z,escTime,itr,c)
 
             plane.posX += plane.fsX
 
         plane.posX = plane.reset[0]
         plane.posY += plane.fsY
+        ret.write('\n')
 
 
-        out.write(output)
-        output = []
+        #out.write(output)
+        #output = []
 
 ##        if opt and plane.posY > 0:
 ##            #best case div rendertime/2
 ##            output += symmetry(output,julia,y,resY,resX)
 ##            break
-
+    ret.close()
     return output
 
 #Rendering Modes

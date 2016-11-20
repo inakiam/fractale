@@ -1,6 +1,10 @@
 import Fractale
 from cmath import *
 
+class Anyme(object):
+
+    
+
 def parse(trans):
     ##lambda factory for custom transformations
 

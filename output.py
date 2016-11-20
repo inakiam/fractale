@@ -24,15 +24,15 @@ class PPX(object):
 
         if self.mode: #binary PPMs
 
-            self.file = open(self.fname+self.ext[(self.header-1)*4:self.header*4],
-                             'wb')
+            self.file = open(self.fname+self.ext[(self.header-1)*4:
+                                                 self.header*4],'wb')
 
             self.file.write(bytearray(ppmHeader,'UTF-8'))
 
         else:
 
-            self.file = open(self.fname+self.ext[(self.header-1)*4:self.header*4]+
-                             '.txt','w')
+            self.file = open(self.fname+self.ext[(self.header-1)*4:
+                                                 self.header*4]+'.txt','w')
 
             self.file.write(ppmHeader)
 
