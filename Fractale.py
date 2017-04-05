@@ -95,7 +95,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform,raw):
 
     #Set up the graph for rendering.
     plane.updateRes(resX,resY)
-    plane.updateMulti(epicentre=[-.75,0],magnitude=0)
+    plane.updateMulti(epicentre=[0,0],magnitude=0)
 
     #Set up colouring algorithm for colouring.
     colour.updateMulti(pal=3)
@@ -103,8 +103,9 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform,raw):
     couter = colour.cPic(4)
 
     #Set up output container.
-    out = PPX()
-    out.setMost(3,1,resX,resY,'Output'+str(n))
+    if not raw:
+        out = PPX()
+        out.setMost(3,1,resX,resY,'Output'+str(n))
 
     #Assign function to be called
     fSet = eqs[fSet]
@@ -126,6 +127,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform,raw):
                 if escTime == itr:
                     curLine += cinter(z,escTime,itr,c)
                 else: curLine += couter(z,escTime,itr,c)
+            else: output += [[z[-1],len(z)-1]]
 
             plane.posX += plane.fsX
 
@@ -135,7 +137,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform,raw):
         if not raw:
             out.write(curLine)
             curLine = []
-        else: output += [[z[-1],len(z)-1]]
+        
 
 ##        if opt and plane.posY > 0:
 ##            #best case div rendertime/2
@@ -147,9 +149,9 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform,raw):
 
 #Rendering Modes
 
-def run(x,y, fSet):
+def run(x,y, fSet,j):
 
-    calculate(fSet,2,80,0,(0j),(0+0j),False,x,y," Raw ",lambda c:c,True)
+    calculate(fSet,2,80,j,(.1+.2j),(0+0j),False,x,y," Raw ",lambda c:c,False)
     print("Render Complete.")
 
 def superset(j,x,y,itr,sSym=False):
@@ -165,18 +167,18 @@ def superset(j,x,y,itr,sSym=False):
     ----odd-n rotal symmetry cannot be rendered properly.
     '''
 
-    field.updateMulti(resX=x,resY=y,magnitude=1)
+    field.updateMulti(resX=x,resY=y,magnitude=0)
     
     #Julia Coords for inverse supersets.   
     cX,cY = 0,0#-.783091,-.149219#.296906,.502234
 
     final = []
 
-    formSet = 1
+    formSet = 0
     mSet = True
     curLine = []
-    out = PPX()
-    out.setMost(3,1,x,y,'SuperOutput')
+    outp = PPX()
+    outp.setMost(3,1,x,y,'SuperOutput')
     colour.updateMulti(pal=3)
     cAlg = colour.cPic(1)
 
@@ -184,8 +186,8 @@ def superset(j,x,y,itr,sSym=False):
 
         for points in range(x):
 
-            z =  calculate(formSet,2,itr,mSet,complex(field.posX,field.posY)
-                               ,complex(cX,cY),0,j,j,"",lambda c: c,True)
+            z = calculate(formSet,2,itr,mSet,complex(field.posX,field.posY)
+                               ,complex(cX,cY),False,j,j,"",lambda c: c,True)
 
             javg = sum([i[0] for i in z])/j**2
             escAvg = sum([i[1] for i in z])/j**2
@@ -199,7 +201,7 @@ def superset(j,x,y,itr,sSym=False):
         #Satisfy idle curiosity
         if rows%15 == 1: print('Render is',str(round((rows/y)*(2 if sSym else 1)
                                                      *100, 3))+'% done.')
-        out.write(curLine)
+        outp.write(curLine)
         field.posY += field.fsY
         field.posX = field.reset[0]
 
@@ -209,8 +211,5 @@ def superset(j,x,y,itr,sSym=False):
 
     print("Render complete.")
 
-    #toPPX(3,True,final,x,y,fname='Renders/c('+str(cX)+','+str(cY)+') at '+str(j)
-     #     +' ['+tBaseN(randint(0,1230942345))+']')
-
-run(100,100,0)
-superset(10,100,100,0)
+#run(100,100,0,True)
+superset(10,100,100,40)

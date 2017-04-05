@@ -1,15 +1,16 @@
 #Factal Eqs
 
 
-def mandelbrot(z,c,pwr,itr,limit,j = False,ex = False,i=0,transform=None):
+def mandelbrot(z,c,pwr,itr,limit,j,transform):
 
     '''Mandelbrot/Julia ETA.'''
-
-    z = [0]
+    if j: z,c = c,z
+    
+    z = [z]
     zenith = 1
-
-    if j: z,c = c,z 
-
+    i=0
+    
+    #LETS NOT DIVIDE BY ZERO
     if c == complex(0,0) and pwr < 0: return z,i
 
     if pwr < 0: z += [c]
