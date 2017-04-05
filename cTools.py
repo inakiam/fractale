@@ -3,6 +3,66 @@
 
 from decimal import *
 from math import *
+getcontext().prec = 10000
+
+def pe(n):
+    
+
+    def prod(n):
+        out = 1
+        for i in n: out *= i
+        return out
+
+    a = sieve(n)
+    b = [prod(a[0:i+1]) for i in range(len(a))]
+    c = [Decimal(i)**-1 for i in b]
+
+    return sum(c)
+
+def pre(n):
+
+    def prod(n):
+        out = 1
+        for i in n: out *= i
+        return out
+
+    a = [i for i in range(1,n+1)]
+    b = [prod(a[0:i+1]) for i in range(len(a))]
+    c = [Decimal(i)**-1 for i in b]
+
+    return 1 + sum(c)
+
+def ne(n):
+
+    def prod(n):
+        out = 1
+        for i in n: out *= i
+        return out
+
+    ax = sieve(n)
+    ay = [i for i in range(1,n+1)]
+
+    a = [i for i in ay if i not in ax] 
+    b = [prod(a[0:i+1]) for i in range(len(a))]
+    c = [Decimal(i)**-1 for i in b]
+
+    return 1 + sum(c)
+
+    
+
+def invConsts(n):
+    '''Calculate sum of inverse powers of n.'''
+
+    getcontext().prec = 400
+
+    out = 0
+
+    for i in range(4000):
+
+        out += Decimal(n)**Decimal(-(i+1))
+
+    return out
+    
 
 def toPPX(header,mode,content,width,height,
           comment='Godiva. Fractal. Popcorn.',fname="Output",depth=8):

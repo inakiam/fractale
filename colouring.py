@@ -57,6 +57,7 @@ class Colouring(object):
         return ext
 
     def negarc(self,z,escTime,itr,c):
+        z=z[-1]
 
         return self.interpolate(z.real - abs(z.imag))
 
@@ -64,10 +65,12 @@ class Colouring(object):
     ###Exterior-only
     def eta(self,z,escTime,itr,c):
 
-        return self.pallet[escTime%(len(self.pallet))]
+        if type(escTime) is int:
+            return self.pallet[escTime%(len(self.pallet))]
+        else: return self.interpolate(escTime)
 
     def etaSm(self, z, escTime, itr,c):
-
+        z = z[-1]
         
         escTime = abs(escTime + 1 - (cmath.log( cmath.log(abs(z)) /
                                             cmath.log(2) ) / cmath.log(2)))
@@ -78,6 +81,8 @@ class Colouring(object):
     #Experimental
 
     def arcinv(self, z, escTime, itr, c):
+
+        z = z[-1] #This algorithm only uses the last iteration of z.
 
         z = (cmath.log( cmath.log(z) /
                                             cmath.log(2) ) / cmath.log(2))
@@ -92,10 +97,13 @@ class Colouring(object):
 
         return [int(255*(2-i)/2)%256 for i in self.CSpace.hsv2rgb()]
 
-    def expy(self, z, escTime, itr, c):
+    def recursiveArc(self, z, escTime, itr, c):
+        #Maps points on the fractal to int/ext of mandelbrot
+
+        z = z[-1] #only use last z.
 
         c = (z/abs(z))*.255 - 1
-        z = 0
+        z = [0]
         zenith = 1
         i=0
 
@@ -103,8 +111,8 @@ class Colouring(object):
 
             i += 1
 
-            z = z ** 2 + c
-            zenith = z
+            z += [z[-1] ** 2 + c]
+            zenith = z[-1]
 
         
 
@@ -117,6 +125,7 @@ class Colouring(object):
         elif n==2: function = self.negarc
         elif n==3: function = self.etaSm
         elif n == 4: function = self.arcinv
+        elif n == 5: function = self.recursiveArc
         elif n==92271: function = self.expy
 
         return function

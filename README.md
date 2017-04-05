@@ -101,6 +101,21 @@ The linear method had constant speed throughout.
 
 Other methods are being considered; most especially ones that feature dynamic speed adjustment based on what you are doing to the terms to make transformations that don't proceed linearly, do so. For example, if you move from a z^2 mandelbrot to z^6, you will notice that most of the animation is spent in a "mostly z^6-ish shape" increase the difference between powers, and eventually, you reach a stage where every fram of the animation seems to be nothing but the higher power version, except for the first.
 
+##Animating New Terms
+
+Let's say you wish to go from z + c to z + c + p. Unlike an interpolation from z to p, or from z + z to p + z, you can't get there just by changing what you already have, since you're moving from 2 to 3 terms.
+
+You can always give the renderer z + c + 0 as your starting formula, and interpolate 0 with p. But Fractale also allows you to easily add a new term to the animation if you have a new idea. To do this, simply call addTerm(node). If you want to add a term to the top level, node can be any top level adress. If you want it to be a subterm of a term, node can be the adress of any subterm.
+
+The code *always* add your new term to the *end* of the list of terms (it will be the last term in that part of the formula). Because of this, as a best practice, it is reccomended that you use term 0 for top level, and a blank subterm for deeper levels. Other uses will work, but it will make it harder for humans to understand your animations.
+
+Ex:
+
+addTerm("0") = Add a term to the top level.
+addTerm("0.") = Add a subterm to term 0.
+addterm("1.3.") = Add a subterm to subterm 3 of term 1.
+
+
 
 ##License
 License is WTFPL 2.0, because really, who would?

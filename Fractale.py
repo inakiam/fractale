@@ -73,7 +73,7 @@ def symmetry(rawIn,julia,yNow,yFinal,x):
 #Main calculation function
 #Run the colouring algo before using symmetry. Fucking seriously. It's faster.
 
-def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform):
+def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform,raw):
 
     '''ETA Fractal Calculator.
     fSet defines formulas; see function ePic for details.
@@ -89,8 +89,9 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform):
     limit = 4 #How high the absolute value of Z must be to escape the set.
 
     #Output Variables
-    rawOut = []
-    output = []
+    output = [] #Stores raw output; basically for Supersets only.
+    curLine = [] #Stores colour output; for image writing
+    
 
     #Set up the graph for rendering.
     plane.updateRes(resX,resY)
@@ -98,7 +99,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform):
 
     #Set up colouring algorithm for colouring.
     colour.updateMulti(pal=3)
-    cinter = colour.cPic(92271)
+    cinter = colour.cPic(5)
     couter = colour.cPic(4)
 
     #Set up output container.
@@ -107,8 +108,6 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform):
 
     #Assign function to be called
     fSet = eqs[fSet]
-
-    ret = open("mandeldump.big","w")
 
     #Iterate over the space.
     for y in range(resY):
@@ -119,41 +118,39 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform):
             c = complex(plane.posX, plane.posY) + cBase
             z = zBase
 
-            z = fSet(z,c,pwr,itr,limit,julia,transform=transform)
+            z = fSet(z,c,pwr,itr,limit,julia,transform)
 
-            ret.write(str(z))
+            escTime = len(z)-1
 
-            #z,escTime = z[-1],len(z)-1
-
-            #if escTime == itr:
-               # output += cinter(z,escTime,itr,c)
-            #else: output += couter(z,escTime,itr,c)
+            if not raw:
+                if escTime == itr:
+                    curLine += cinter(z,escTime,itr,c)
+                else: curLine += couter(z,escTime,itr,c)
 
             plane.posX += plane.fsX
 
         plane.posX = plane.reset[0]
         plane.posY += plane.fsY
-        ret.write('\n')
 
-
-        #out.write(output)
-        #output = []
+        if not raw:
+            out.write(curLine)
+            curLine = []
+        else: output += [[z[-1],len(z)-1]]
 
 ##        if opt and plane.posY > 0:
 ##            #best case div rendertime/2
 ##            output += symmetry(output,julia,y,resY,resX)
 ##            break
-    ret.close()
-    return output
+        
+    if raw: return output
+    else: return -1
 
 #Rendering Modes
 
 def run(x,y, fSet):
 
-    output = calculate(fSet,2,80,0,(0j),(0+0j),False,x,y,"Q",lambda c:c)
-    print("Render Complete. Writing to file...")
-    toPPX(3,True,output,x,y,fname = 'Renders/render')
-    print("Done.")
+    calculate(fSet,2,80,0,(0j),(0+0j),False,x,y," Raw ",lambda c:c,True)
+    print("Render Complete.")
 
 def superset(j,x,y,itr,sSym=False):
 
@@ -177,36 +174,43 @@ def superset(j,x,y,itr,sSym=False):
 
     formSet = 1
     mSet = True
+    curLine = []
+    out = PPX()
+    out.setMost(3,1,x,y,'SuperOutput')
+    colour.updateMulti(pal=3)
+    cAlg = colour.cPic(1)
 
     for rows in range(y):
 
         for points in range(x):
 
-            output = calculate(formSet,2,itr,mSet,complex(plane.posX,plane.posY)
-                               ,complex(cX,cY),0,j,j)
-            rgb = [0,0,0]
+            z =  calculate(formSet,2,itr,mSet,complex(field.posX,field.posY)
+                               ,complex(cX,cY),0,j,j,"",lambda c: c,True)
 
-            field.posX += field.fundamentalStep
+            javg = sum([i[0] for i in z])/j**2
+            escAvg = sum([i[1] for i in z])/j**2
 
-            #Accumulate the pixels in output into a single-pixel list
-            for vals in range(len(output)):
-                rgb[vals%3] += output[vals]
+            curLine += cAlg(0,escAvg,0,0)
 
-            #Add to final a pixel which is the average of all pixels in output
-            final += [int(rgb[i]/(len(output)/3)) for i in range(len(rgb))]
+            field.posX += field.fsX
 
+        
+        
         #Satisfy idle curiosity
         if rows%15 == 1: print('Render is',str(round((rows/y)*(2 if sSym else 1)
                                                      *100, 3))+'% done.')
-
-        field.posY += field.fundamentalStep
+        out.write(curLine)
+        field.posY += field.fsY
         field.posX = field.reset[0]
 
-        if sSym and field.posY > 0:
-            final += symmetry(final,0,rows,y,x)
-            break 
+        curLine = []
+
+        
 
     print("Render complete.")
 
-    toPPX(3,True,final,x,y,fname='Renders/c('+str(cX)+','+str(cY)+') at '+str(j)
-          +' ['+tBaseN(randint(0,1230942345))+']')
+    #toPPX(3,True,final,x,y,fname='Renders/c('+str(cX)+','+str(cY)+') at '+str(j)
+     #     +' ['+tBaseN(randint(0,1230942345))+']')
+
+run(100,100,0)
+superset(10,100,100,0)
