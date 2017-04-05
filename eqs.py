@@ -21,6 +21,8 @@ def mandelbrot(z,c,pwr,itr,limit,j,transform):
 
         z += [z[-1] ** pwr + c]
         zenith = z[-1]
+        if len(z) > 5:
+            pass
 
     return z #Return coordinate vector of all zs
 

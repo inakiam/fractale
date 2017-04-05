@@ -95,7 +95,7 @@ def calculate(fSet,pwr,itr,julia,zBase,cBase,opt,resX,resY,n,transform,raw):
 
     #Set up the graph for rendering.
     plane.updateRes(resX,resY)
-    plane.updateMulti(epicentre=[0,0],magnitude=0)
+    plane.updateMulti(epicentre=[0,0],magnitude=1)
 
     #Set up colouring algorithm for colouring.
     colour.updateMulti(pal=3)
@@ -167,20 +167,22 @@ def superset(j,x,y,itr,sSym=False):
     ----odd-n rotal symmetry cannot be rendered properly.
     '''
 
-    field.updateMulti(resX=x,resY=y,magnitude=0)
+    field.updateMulti(resX=x,resY=y,epicentre = [-.75,0],magnitude=-.2)
     
     #Julia Coords for inverse supersets.   
     cX,cY = 0,0#-.783091,-.149219#.296906,.502234
 
     final = []
 
+    color = Colouring()
     formSet = 0
     mSet = True
     curLine = []
     outp = PPX()
     outp.setMost(3,1,x,y,'SuperOutput')
-    colour.updateMulti(pal=3)
-    cAlg = colour.cPic(1)
+    color.updateMulti(pal=2)
+    cIn = color.cPic(1)
+    cOu = [0,0,0]
 
     for rows in range(y):
 
@@ -191,8 +193,9 @@ def superset(j,x,y,itr,sSym=False):
 
             javg = sum([i[0] for i in z])/j**2
             escAvg = sum([i[1] for i in z])/j**2
+            
 
-            curLine += cAlg(0,escAvg,0,0)
+            curLine += [round(i - escAvg/itr*i) for i in cIn(0,escAvg,0,0)]
 
             field.posX += field.fsX
 
