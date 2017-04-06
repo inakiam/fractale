@@ -242,3 +242,35 @@ class PPX(object):
 ##            elif (header <3) and  (i == width-1): file.write("\n")
 ##
 ##        file.close()
+
+
+
+################## This. This needs to be translated into a procedure that Output can use to mirror the file itself.
+        ########## Now that I've switched to streaming the fractal to file.
+# def symmetry(rawIn, julia, yNow, yFinal, x):
+#     '''Return a rotated or mirrored version of input.'''
+#
+#     output = []
+#
+#     yNow += 1
+#
+#     if julia:
+#
+#         # Julias that are symmetrical show rotal symmetry,
+#         # so they need a different algorithm
+#
+#         for i in range(-1, (-x * 3 * (yFinal - yNow)), -3):
+#             output += [rawIn[i - 2], rawIn[i - 1], rawIn[i]]
+#
+#
+#     else:
+#
+#         # copy rawIn, in order, to an array, packing it by line
+#         # then use extended list slicing to invert the order.
+#         intermediate = [[rawIn[nums + rows] for nums in range(x * 3)]
+#                         for rows in range(0, (x * 3 * (yFinal - yNow)), x * 3)][::-1]
+#
+#         for i in range(len(intermediate)):
+#             output += intermediate[i]
+#
+#     return output
