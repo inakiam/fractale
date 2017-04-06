@@ -84,7 +84,10 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, transform
                 else:
                     curLine += couter(z, escTime, itr, c)
             else:
-                output += [[z[-1], len(z) - 1]]
+                if escTime = itr:
+                    output[0] += [[z[-1], len(z) - 1]]
+                else:
+                    output[1]
 
             plane.posX += plane.fsX
 

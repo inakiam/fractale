@@ -78,6 +78,10 @@ class Graph(object):
         ## Reset var for when head goes out of range.
         self.reset = [xlNeg,ylNeg]
 
+        #Var containing epicentre, a corner, and .
+        #Useful for various distance calcs
+        self.centralExtrema = ((xlNeg,ylNeg), (self.epicentre[0],self.epicentre[1]))
+
     #Update functions: Change some info about graph and get new units.
     #Enables resizing window, moving udlr, and zooming
 
