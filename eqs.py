@@ -191,22 +191,3 @@ def superset(z,c,pwr,itr,limit, j = False,ex = False, i = 0):
     
 
 eqs = [mandelbrot,sakura,mBar,bShip,bSaku,sinBrot,duck,apollyon,kel]
-
-
-
-from random import random
-def estimate():
-    a = 0
-    b = 0
-    c = []
-    while True:
-        a +=1 if len(mandelbrot(0,complex(random()*3 - 2,random()*2.5 - 1.25),2,80,4)) is 81 else 0
-        b+=1
-        if b%1000000 == 0:
-            c += [a/b * 3*2.5]
-            a = 0
-            b = 0
-            if len(c) % 5 == 0:
-                print(sum(c)/len(c))
-
-    return a/b
