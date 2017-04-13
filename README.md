@@ -1,7 +1,9 @@
 # fractale
 ![mandelbrot superset](https://raw.githubusercontent.com/inakiam/fractale/master/sOut.png)
 
-Fractale is a fractal fractal calculator calculator designed by me for the sole putpose of doing things other calculators won't let me do without paying for them. The main use case is the creation of so-called fractal supersets, which are awesome images made by compressing julia sets into pixels to create maps of juliaspace. 
+Fractale is a fractal fractal calculator calculator designed by me for the sole putpose of doing things other
+calculators won't let me do without paying for them. The main use case is the creation of so-called fractal supersets,
+which are awesome images made by compressing julia sets into pixels to create maps of juliaspace.
 
 I don't particularly care about how nice looking the codebase is, so prepare for your eyes to bleed on the sheer amateur-hour-ness of it.
 
@@ -15,9 +17,22 @@ THIS DOCUMENTATION IS WRITTEN FOR A LATER VERSION. FRACTALE DOES NOT YET WORK.
 
 You can use the follwing variables:
 
-z, c, and p
+z, c, p, a_n, and r_n.
 
-If you are multiplying, always type the "\*" explicitly! Algebraic expression of coefficients is not *yet* supported. If you write 2(z) or 2z, it won't work.
+z is the principle calculated coordinate of the set, and equals 0 at iteration 0. c is the base coordinate, and is a
+constant. z and c switch places in a julia set, and post swap, neither has a value of 0. p is always what z was
+*on the prior iteration*. a_n is an absolute previous value of z, where n is the iteration you want. r_n is a relative
+previous value of z, where, n is the number of iteration back you want.
+
+a_n and r_n will default to an identity element supposing the index you select doesn't exist yet. For example, if you
+type a_10, until iteration 10, it won't appear. If you type r_3, until you have at least three iterations,
+it won't appear. But, if you're using them to multiply other things, or add, those things will appear. So basically,
+until a_n or r_n has valid data, they act like 0 when added or subtracted, 1 when multiplied, etc.
+
+Please note that this is achieved by functions, and so can meaningfully impact your rendering time. Snrk.
+
+If you are multiplying, always type the "\*" explicitly! Algebraic expression of coefficients is not *yet* supported.
+If you write 2(z) or 2z, it won't work.
 
 Typing "x" to multiply will *never* be supported. Typing 2xZ will cause an error. Type 2\*Z
 
