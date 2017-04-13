@@ -143,7 +143,7 @@ def superset(j, x, y, itr, sSym=False):
     mSet = True
     curLine = []
     outp = PPX()
-    outp.setMost(3, 1, x, y, 'SuperOutput')
+    outp.setMost(3, 1, x, y, 'SupeeeqwerOutput')
     color.updateMulti(pal=0)
     cOut = color.cPic(1)
     cIn = [0, 0, 0]
@@ -156,6 +156,7 @@ def superset(j, x, y, itr, sSym=False):
 
 
             escAvg = sum([i[1] for i in zOut]) / j ** 2
+            
 
             curLine += cOut(0, escAvg, 0, 0)
 

@@ -257,8 +257,6 @@ def e(precis):
 
     return e
 
-
-
 def factorial(n):
     out = 1
     for i in range(1, n):
