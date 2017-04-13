@@ -172,14 +172,9 @@ def superset(j, x, y, itr, sSym=False):
 
     print("Render complete.")
 
-def roots(z, n):
-    nthRootOfr = abs(z)**(1.0/n)
-    t = phase(z)
-    return [map(lambda k: nthRootOfr*exp((t+2*k*pi)*1j/n), range(n))]
+class Fractale(Graph,Colouring):
 
-class Fractale(Graph):
 
-    #The recursion
 
 ''' NEW DEV TARGET: Since the renderer can give all julias intact; make a progream for outputting julia mosaics. '''
 '''DISTANCE COLOUR ALGO. SET Z = FURTHEST POINT FROM CENTRE TO BE RENDERED. LET ANY POINT ABS(Z) BE 50% GREY.
@@ -187,8 +182,7 @@ THEN INFINITY IS WHITE, AND ZERO IS BLACK. MAybe acomplishable with a fraction w
 let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 0, div by infinity.
 '''
     #Objects of Use
-    colour = Colouring()
-    output = PPX()
+    Colouring().__init__()
 
     #Polymorphic Storage Vars; because I'm lazy.
     eqs = 1
@@ -198,18 +192,23 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
     ##Mandel/Julia Switch
     baseSetMandel = True
     superSetJulia = not(baseSetMandel)
+
     ##Iteration Depth
     itr = 80
     ##Bailout Value: Stop calculation when abs(z) exceeds.
     limit = 4
+
     ##Base values of z,c
     zBase = 0j
     cBase = 0j
+
     ##Fractal set id
     fSet = 0
+
     ##Image Resolution
     resX = 100
     resY = 100
+
     ##Point Generation Algorithm
     algo = 0
     ##Rendering Method.
@@ -220,11 +219,17 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
 
     def __init__(self,base=True,antecedent = None):
 
+        #Setup Graph...
+        Graph.__init__()
+        Graph.(resX=self.resX, resY=self.resY, epicentre=[-.75, 0], magnitude=0)
+
+
+        #Inconstants
         if base:
             #create things not necessary in recursive calculators
             self.superCalc = Fractale(base = False,self)
             self.out = PPX()
-
+            self.out.setMost(3,1,resX,resY,'Fractale [' +str(tBaseN(randint(1,4000))) + ']')
         else:
             #Give supercalc access to Parent
             self.Parent = antecedent
@@ -247,25 +252,11 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
         triangle = round(.5 * (1 + (8 * (self.resX * self.resY) + 1) ** .5))
 
         for i in range(1, triangle + 1):
-            out += roots(c, i)
+            out += allComplexRoots(c, i)
 
         return out
 
-    def __iMeanIt__(nList, mType):
-        '''Returns various types of mean.'''
 
-        if type(nList[0]) is int: #if nList is escTime, so geomean is nonzero
-            #This is OK because it's OK to count from 1. If ugly.
-            nList = [i + 1 for i in nList]
-
-        if mType == 0: #Arithmetic
-            return (sum(nList) / len(nList))
-        if mType == 1: #Geometric
-            gMean =  (prod(nList) ** (1 / len(nList)))
-
-            return gMean - 1 if type(nList[0]) is int else gMean
-        if mType == 2: #Harmonic
-            return len(nList) * sum([i ** -1 for i in a]) ** -1
 
 
     def setAlgo(self,algo):
@@ -275,6 +266,12 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
 
     def setZPerturbation(self, real, imag):
         self.zBase = complex(real, imag)
+
+    def setImageCentre(self,real, imag):
+        Graph.updateEp(epicentre = [real,imag])
+
+    def setZoom(self,zoom):
+        Graph.updateMag(zoom)
 
     def setbaseSetMandel(self, switch):
         self.baseSetMandel = switch
@@ -288,13 +285,41 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
 
         if self.rMode == 0:
 
-            if self.algo == 0:
-                ###Normal plane render
-                pass
+            for y in range(resY):
 
+                for x in range(resX):
 
+                    c = complex(Graph.posX, Graph.posY) + cBase
+                    z = zBase
 
+                    z = fSet(z, c, pwr, itr, limit, julia, transform)
 
+                    escTime = len(z) - 1
+
+                    if not raw:
+                        if escTime == itr:
+                            curLine += cinter(z, escTime, itr, c)
+                        else:
+                            curLine += couter(z, escTime, itr, c)
+                    else:
+                        if escTime == itr:
+                            output[0] += [[z[-1], escTime]]
+                        else:
+                            output[1] += [[z[-1], escTime]]
+
+                    Graph.posX += Graph.fsX
+
+                Graph.posX = Graph.reset[0]
+                Graph.posY += Graph.fsY
+
+                if self.algo == 0:
+                    out.write(curLine)
+                    curLine = []
+            #Return Values for graph renders...
+            if self.algo == 1:
+                return rOut
+            elif:
+                return -1
 
         elif self.rMode == 1 and not(self.Base): # this rendermode makes no sense for base sets
 

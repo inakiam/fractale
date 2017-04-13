@@ -73,6 +73,31 @@ def thing(itr, size):
 
     return iterCount
 
+def allComplexRoots(z, n):
+    '''Get all complex roots of z.'''
+    nthRootOfr = abs(z)**(1.0/n)
+    t = phase(z)
+    return [map(lambda k: nthRootOfr*exp((t+2*k*pi)*1j/n), range(n))]
+
+def allComplexLogs(z):
+    '''Get all complex logs of z.'''
+
+
+def iMeanIt(nList, mType):
+    '''Returns various types of mean.'''
+
+    if type(nList[0]) is int: #if nList is escTime, so geomean is nonzero
+        #This is OK because it's OK to count from 1. If ugly.
+        nList = [i + 1 for i in nList]
+
+    if mType == 0: #Arithmetic
+        return (sum(nList) / len(nList))
+    if mType == 1: #Geometric
+        gMean =  (prod(nList) ** (1 / len(nList)))
+
+        return gMean - 1 if type(nList[0]) is int else gMean
+    if mType == 2: #Harmonic
+        return len(nList) * sum([i ** -1 for i in a]) ** -1
 
 def prod(n):
     out = 1
