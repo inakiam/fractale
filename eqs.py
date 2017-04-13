@@ -179,15 +179,6 @@ def apollyon(z,c,pwr,itr,limit,j = False,ex = False,i=0):
         i += 1
 
     return z,i
-
-def superset(z,c,pwr,itr,limit, j = False,ex = False, i = 0):
-
-    output = calculate(fSet,pwr,itr,False if julia else True,0,0,True,10,10)
-
-    for vals in range(len(output)):
-        rgb[vals%3] += output[vals]
-
-    return [int(rgb[i]/(len(output)/3)) for i in range(len(rgb))]
     
 
 eqs = [mandelbrot,sakura,mBar,bShip,bSaku,sinBrot,duck,apollyon,kel]
