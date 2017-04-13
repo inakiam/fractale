@@ -1,4 +1,5 @@
 # fractale
+![mandelbrot superset](https://raw.githubusercontent.com/inakiam/fractale/master/sOut.png)
 
 Fractale is a fractal fractal calculator calculator designed by me for the sole putpose of doing things other calculators won't let me do without paying for them. The main use case is the creation of so-called fractal supersets, which are awesome images made by compressing julia sets into pixels to create maps of juliaspace. 
 
