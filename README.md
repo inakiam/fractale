@@ -29,7 +29,10 @@ is to move the algorithm to the GPU, since most of the usual optimizations just 
 * * Root Sets
 * * Log Sets
 * * Others
-* Fractal Animation
+* Fractal Animation transform 
+* * Forced linear/sinusoidal speed
+* * * The distance between some sets, particularly those with  higher powers of z and lower ones is not itself linear, 
+so we have to renormalise that and pick values of tranforms that behave as desired.
 * * Formula Transforms
 * * Plane Transforms
 * * With custom timing for music sync
@@ -127,7 +130,8 @@ The interpolation method is how you want Fractale to transform the term into the
 supported - linear, and trigonometric. These are discussed in detail at the end of this segment.
 
 The start time tells fractale when it should start the transformation. The start time of at least *one* transformation 
-in your animation must be zero, for now. (actually, it doesn't, but unless you want to waste time and compute resources, should make sure to do this so fractale doesn't render the same fractal 30 times in a row)
+in your animation must be zero, for now. (actually, it doesn't, but unless you want to waste time and compute resources,
+should make sure to do this so fractale doesn't render the same fractal 30 times in a row)
 
 The end time tells Fractale when the transformation should be complete.
 
