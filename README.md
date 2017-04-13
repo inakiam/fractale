@@ -45,9 +45,19 @@ THIS DOCUMENTATION IS WRITTEN FOR A LATER VERSION. FRACTALE DOES NOT YET WORK.
 
 ## Writing a custom formula
 
-You can use the follwing variables:
+If you are multiplying, always type the "\*" explicitly! Algebraic expression of coefficients is not *yet* supported.
+If you write 2(z) or 2z, it won't work.
 
-z, c, p, a_n, and r_n.
+Typing "x" to multiply will *never* be supported. Typing 2xZ will cause an error. Type 2\*Z
+
+Spaces are OK. The program can deal with them.
+
+If you want to write a power, "^" and "\*\*" are supported. z\*\*2 and z^2 wll both square z.
+
+
+### Allowed Constants and Variables, and What They Do
+
+z, c, p, a_n, and r_n, pi, and  e.
 
 z is the principle calculated coordinate of the set, and equals 0 at iteration 0. c is the base coordinate, and is a
 constant. z and c switch places in a julia set, and post swap, neither has a value of 0. p is always what z was
@@ -61,23 +71,21 @@ until a_n or r_n has valid data, they act like 0 when added or subtracted, 1 whe
 
 Please note that this is achieved by functions, and so can meaningfully impact your rendering time. Snrk.
 
-If you are multiplying, always type the "\*" explicitly! Algebraic expression of coefficients is not *yet* supported.
-If you write 2(z) or 2z, it won't work.
+pi and e are the constants using those names. They are and do what you'd expect.
 
-Typing "x" to multiply will *never* be supported. Typing 2xZ will cause an error. Type 2\*Z
 
-Spaces are OK. The program can deal with them.
+### Supported Functions
 
-If you want to write a power, "^" and "\*\*" are supported. z\*\*2 and z^2 wll both square z.
-
-Some extra functions are supported:
-
-* The three main trig functions - sin, cos, tan - and their hyperbolic equivalents, as will as the inverse functions of all of those
+* The three main trig functions - sin, cos, tan - and their hyperbolic equivalents, as will as the inverse functions 
+of all of those
 * Natural logartihm w/ log(number)
-** Unnatural log via log(number,base) - may cause accusations of blasphemy
+* * Unnatural log via log(number,base) - may cause accusations of blasphemy
 * exp and sqrt, if you want them
+* Non-principal roots via nrootn(number,depthOfRoot,rootPhase)
+* Riemann Zeta Function
+* Contact me for whatever you want, or fork cTools and add it in the appropriate section.
 
-You can also refer to some useful transcendentals - pi, e,
+
 
 ## Animating
 
