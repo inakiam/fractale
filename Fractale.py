@@ -1,9 +1,11 @@
+from cmath import *
 ##Custom Classes
 from colouring import Colouring
 from graph import Graph
 from output import PPX
 # Custom Functions
 from eqs import *
+from cTools import *
 
 
 # Builtin Functions
@@ -46,7 +48,7 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, transform
     limit = 4  # How high the absolute value of Z must be to escape the set.
 
     # Output Variables
-    output = []  # Stores raw output; basically for Supersets only.
+    output = [[],[]]  # Stores raw output; basically for Supersets only. [[points in set],[points outside]]
     curLine = []  # Stores colour output; for image writing
 
     # Set up the graph for rendering.
@@ -84,10 +86,10 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, transform
                 else:
                     curLine += couter(z, escTime, itr, c)
             else:
-                if escTime = itr:
-                    output[0] += [[z[-1], len(z) - 1]]
+                if escTime == itr:
+                    output[0] += [[z[-1], escTime]]
                 else:
-                    output[1]
+                    output[1] += [[z[-1],escTime]]
 
             plane.posX += plane.fsX
 
@@ -129,7 +131,7 @@ def superset(j, x, y, itr, sSym=False):
     ----odd-n rotal symmetry cannot be rendered properly.
     '''
 
-    field.updateMulti(resX=x, resY=y, epicentre=[-.75, 0], magnitude=-.2)
+    field.updateMulti(resX=x, resY=y, epicentre=[-.75, 0], magnitude=0)
 
     # Julia Coords for inverse supersets.
     cX, cY = 0, 0  # -.783091,-.149219#.296906,.502234
@@ -142,20 +144,20 @@ def superset(j, x, y, itr, sSym=False):
     curLine = []
     outp = PPX()
     outp.setMost(3, 1, x, y, 'SuperOutput')
-    color.updateMulti(pal=2)
-    cIn = color.cPic(1)
-    cOu = [0, 0, 0]
+    color.updateMulti(pal=0)
+    cOut = color.cPic(1)
+    cIn = [0, 0, 0]
 
     for rows in range(y):
 
         for points in range(x):
-            z = calculate(formSet, 2, itr, mSet, complex(field.posX, field.posY)
+            zIn,zOut = calculate(formSet, 2, itr, mSet, complex(field.posX, field.posY)
                           , complex(cX, cY), False, j, j, "", lambda c: c, True)
 
-            javg = sum([i[0] for i in z]) / j ** 2
-            escAvg = sum([i[1] for i in z]) / j ** 2
 
-            curLine += [round(i - escAvg / itr * i) for i in cIn(0, escAvg, 0, 0)]
+            escAvg = sum([i[1] for i in zOut]) / j ** 2
+
+            curLine += cOut(0, escAvg, 0, 0)
 
             field.posX += field.fsX
 
@@ -170,19 +172,26 @@ def superset(j, x, y, itr, sSym=False):
 
     print("Render complete.")
 
+def roots(z, n):
+    nthRootOfr = abs(z)**(1.0/n)
+    t = phase(z)
+    return [map(lambda k: nthRootOfr*exp((t+2*k*pi)*1j/n), range(n))]
 
-class Fractale(object):
+class Fractale(Graph):
 
     #The recursion
-    if base: supercalc = Fractale(base = False)
 
+''' NEW DEV TARGET: Since the renderer can give all julias intact; make a progream for outputting julia mosaics. '''
+'''DISTANCE COLOUR ALGO. SET Z = FURTHEST POINT FROM CENTRE TO BE RENDERED. LET ANY POINT ABS(Z) BE 50% GREY.
+THEN INFINITY IS WHITE, AND ZERO IS BLACK. MAybe acomplishable with a fraction with preset numerator??? Set numer = a(z)
+let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 0, div by infinity.
+'''
     #Objects of Use
-    colour = Colouring
-    plane = Graph()
-    if base: out = PPX()
+    colour = Colouring()
+    output = PPX()
 
     #Polymorphic Storage Vars; because I'm lazy.
-    eqs =
+    eqs = 1
 
 
     #Default values
@@ -201,8 +210,62 @@ class Fractale(object):
     ##Image Resolution
     resX = 100
     resY = 100
+    ##Point Generation Algorithm
+    algo = 0
+    ##Rendering Method.
+    rMode = min(algo,1)
 
-    def __init__(self,base=True):
+    #Variables to be passed down to recursive instance
+    pointCloud = None
+
+    def __init__(self,base=True,antecedent = None):
+
+        if base:
+            #create things not necessary in recursive calculators
+            self.superCalc = Fractale(base = False,self)
+            self.out = PPX()
+
+        else:
+            #Give supercalc access to Parent
+            self.Parent = antecedent
+
+            #autoconfigure sSet render with some defaults...
+            self.algo = self.Parent.algo
+            self.rMode = min(rMode, 1)
+            self.resX = 10
+            self.resY = 10
+
+
+            #Make vars not needed in Base instance.
+            self.output = [[],[]] #[inside set],[out]
+
+    def __genCloud__(self,c):
+        '''Generates a number of roots ~= julia pixelres.'''
+
+        out = []
+
+        triangle = round(.5 * (1 + (8 * (self.resX * self.resY) + 1) ** .5))
+
+        for i in range(1, triangle + 1):
+            out += roots(c, i)
+
+        return out
+
+    def __iMeanIt__(nList, mType):
+        '''Returns various types of mean.'''
+
+        if type(nList[0]) is int: #if nList is escTime, so geomean is nonzero
+            #This is OK because it's OK to count from 1. If ugly.
+            nList = [i + 1 for i in nList]
+
+        if mType == 0: #Arithmetic
+            return (sum(nList) / len(nList))
+        if mType == 1: #Geometric
+            gMean =  (prod(nList) ** (1 / len(nList)))
+
+            return gMean - 1 if type(nList[0]) is int else gMean
+        if mType == 2: #Harmonic
+            return len(nList) * sum([i ** -1 for i in a]) ** -1
 
 
     def setAlgo(self,algo):
@@ -218,7 +281,35 @@ class Fractale(object):
         self.superSetJulia = not(self.baseSetMandel)
         #if false, is julia
 
+    def render(self):
+
+        #raw output var
+        rOut = []
+
+        if self.rMode == 0:
+
+            if self.algo == 0:
+                ###Normal plane render
+                pass
+
+
+
+
+
+        elif self.rMode == 1 and not(self.Base): # this rendermode makes no sense for base sets
+
+            pointCloud = self.__genCloud__(self.c)
+
+            for c in pointCloud:
+
+                eqs.escTime(self.julia,z,c,self.power,self.itr,self.limit,self.transform)
+
+                pass
+
+            return
+
 
 
 #run(100,100,0,True)
 #superset(10, 100, 100, 40)
+#Fractale()

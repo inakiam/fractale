@@ -5,13 +5,17 @@ def mandelbrot(z,c,pwr,itr,limit,j,transform):
 
     '''Mandelbrot/Julia ETA.'''
     if j: z,c = c,z
-    
     z = [z]
     zenith = 1
     i=0
-    
+
+    try:
+        c = transform(c)
+    except ZeroDivisionError:
+        return z # Not like it was going anywhere...
+
     #LETS NOT DIVIDE BY ZERO
-    if c == complex(0,0) and pwr < 0: return z,i
+    if c == complex(0,0) and pwr < 0: return z
 
     if pwr < 0: z += [c]
 

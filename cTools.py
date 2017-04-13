@@ -74,11 +74,12 @@ def thing(itr, size):
     return iterCount
 
 
+def prod(n):
+    out = 1
+    for i in n: out *= i
+    return out
+
 def pe(n):
-    def prod(n):
-        out = 1
-        for i in n: out *= i
-        return out
 
     a = sieve(n)
     b = [prod(a[0:i + 1]) for i in range(len(a))]
@@ -88,10 +89,7 @@ def pe(n):
 
 
 def pre(n):
-    def prod(n):
-        out = 1
-        for i in n: out *= i
-        return out
+
 
     a = [i for i in range(1, n + 1)]
     b = [prod(a[0:i + 1]) for i in range(len(a))]
