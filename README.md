@@ -5,15 +5,45 @@ Fractale is a fractal fractal calculator calculator designed by me for the sole 
 calculators won't let me do without paying for them. The main use case is the creation of so-called fractal supersets,
 which are awesome images made by compressing julia sets into pixels to create maps of juliaspace.
 
-I don't particularly care about how nice looking the codebase is, so prepare for your eyes to bleed on the sheer amateur-hour-ness of it.
+I don't particularly care about how nice looking the codebase is, so prepare for your eyes to bleed on the sheer
+amateur-hour-ness of it.
+
+# "Fractal fractal renderer Renderer ?"
+
+In addition to doing the same tired crap other fractal renderers do, fractale's renderer is recursive. It can render a
+given fractal set by rendering the julia or mandelbrot sets for that set, and compiling them into a single image. The
+term for such an image is a fractal superset.
+
+THe image that you see at the top of this page provides an example of the output. It used 10x10 images of julia sets on
+the interval (-2-2i,2+2i) each calculated for forty iterations to colour each pixel. The original resolution of the
+banner was 4000x1250, making the actual resolution of the image 40,000 by 12,500 pixels.
+
+As you can tell, supersets are highly computationally expensive. For this reason, the primary long-term goal of Fractale
+is to move the algorithm to the GPU, since most of the usual optimizations just don't work on fractal supersets.
+
+# Feature List of Features That Will Exist in v.01
+
+* User Formula Input
+* Smooth Colouring
+* Relational Supersets
+* * Root Sets
+* * Log Sets
+* * Others
+* Fractal Animation
+* * Formula Transforms
+* * Plane Transforms
+* * With custom timing for music sync
+* GPU Support
+* * Probably only CUDA at first.
+* Rudimentary GUI.
 
 
-#Documentation
+# Documentation
 
 THIS DOCUMENTATION IS WRITTEN FOR A LATER VERSION. FRACTALE DOES NOT YET WORK.
 
 
-##Writing a custom formula
+## Writing a custom formula
 
 You can use the follwing variables:
 
@@ -49,7 +79,7 @@ Some extra functions are supported:
 
 You can also refer to some useful transcendentals - pi, e,
 
-##Animating
+## Animating
 
 When you give a formula to Fractale, it breaks it down into a number of terms. A term is any item in the statement separated from any other item by an addition. For example, the formula "Z + C" has two terms: Z, and C.
 
@@ -91,7 +121,7 @@ So if you shot a transformation at 4 frames per second, and specifed a transform
 This behaviour is necessary to ensure every transformation actually completes in a frame that fractale renders. If the program didn't work like this, and if a transformation completed betwen rendered frames, it could seem to "snap" between complete and incomplete with noticeable jerking.
 
 
-###Interpolation
+### Interpolation
 
 Interpolation is how Fractale allows you to transform fractals. The basic concept is this - if z^2 + c is the mandelbrot set, and z̄^2 + c is the mandelbar set, then the addition of the sets is z^2 + z̄^2 + c
 
@@ -117,7 +147,7 @@ The linear method had constant speed throughout.
 
 Other methods are being considered; most especially ones that feature dynamic speed adjustment based on what you are doing to the terms to make transformations that don't proceed linearly, do so. For example, if you move from a z^2 mandelbrot to z^6, you will notice that most of the animation is spent in a "mostly z^6-ish shape" increase the difference between powers, and eventually, you reach a stage where every fram of the animation seems to be nothing but the higher power version, except for the first.
 
-##Animating New Terms
+## Animating New Terms
 
 Let's say you wish to go from z + c to z + c + p. Unlike an interpolation from z to p, or from z + z to p + z, you can't get there just by changing what you already have, since you're moving from 2 to 3 terms.
 
@@ -133,11 +163,11 @@ addterm("1.3.") = Add a subterm to subterm 3 of term 1.
 
 
 
-##License
+## License
 License is WTFPL 2.0, because really, who would?
 
 
-##TODO
+## TODO
 * rewrite rendering architecture so that z is a vector of all of z's states thus allowing more colouring algos + implicit storage of c as z[0]
 * create colourspace.py class for HSL-HSV-RGB-WHATEVER colour conversions.
 * rewrite fractale.py architecture to be less pants-on-head stupid
