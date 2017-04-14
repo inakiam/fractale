@@ -173,17 +173,7 @@ def superset(j, x, y, itr, sSym=False):
 
     print("Render complete.")
 
-class Fractale(Graph,Colouring):
-
-
-
-''' NEW DEV TARGET: Since the renderer can give all julias intact; make a progream for outputting julia mosaics. '''
-'''DISTANCE COLOUR ALGO. SET Z = FURTHEST POINT FROM CENTRE TO BE RENDERED. LET ANY POINT ABS(Z) BE 50% GREY.
-THEN INFINITY IS WHITE, AND ZERO IS BLACK. MAybe acomplishable with a fraction with preset numerator??? Set numer = a(z)
-let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 0, div by infinity.
-'''
-    #Objects of Use
-    Colouring().__init__()
+class Fractale(Graph):
 
     #Polymorphic Storage Vars; because I'm lazy.
     eqs = 1
@@ -212,11 +202,10 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
 
     ##Point Generation Algorithm
     algo = 0
+    # 0 = Graph
+    # 1 = Roots
     ##Rendering Method.
     rMode = min(algo,1)
-
-    #Variables to be passed down to recursive instance
-    pointCloud = None
 
     def __init__(self,base=True,antecedent = None):
 
@@ -229,8 +218,18 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
         if base:
             #create things not necessary in recursive calculators
             self.superCalc = Fractale(base = False,self)
+
+            #file output
             self.out = PPX()
             self.out.setMost(3,1,resX,resY,'Fractale [' +str(tBaseN(randint(1,4000))) + ']')
+
+            #Colouring not required by recursive class...
+            self.Colour = Colouring()
+            self.cIn = self.Colour.cPic(5)
+            self.cOut = self.Colour.cPic(4)
+
+            #Output var to be used if the dataset is being saved for later processing...
+            self.rOut = []
         else:
             #Give supercalc access to Parent
             self.Parent = antecedent
@@ -279,14 +278,19 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
         self.superSetJulia = not(self.baseSetMandel)
         #if false, is julia
 
+    def setbaseRMode(self,mode):
+        self.rMode = mode
+
     def render(self):
 
         #raw output var
-        rOut = []
+
 
         if self.rMode == 0:
 
             for y in range(resY):
+
+                curLine = []
 
                 for x in range(resX):
 
@@ -299,9 +303,9 @@ let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 
 
                     if not raw:
                         if escTime == itr:
-                            curLine += cinter(z, escTime, itr, c)
+                            curLine += self.cIn(z, escTime, itr, c)
                         else:
-                            curLine += couter(z, escTime, itr, c)
+                            curLine += self.cOut(z, escTime, itr, c)
                     else:
                         if escTime == itr:
                             output[0] += [[z[-1], escTime]]

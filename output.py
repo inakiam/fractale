@@ -105,6 +105,12 @@ class PPX(object):
         if self.row == self.height: self.file.close()
         self.row += 1
 
+''' NEW DEV TARGET: Since the renderer can give all julias intact; make a progream for outputting julia mosaics. '''
+'''DISTANCE COLOUR ALGO. SET Z = FURTHEST POINT FROM CENTRE TO BE RENDERED. LET ANY POINT ABS(Z) BE 50% GREY.
+THEN INFINITY IS WHITE, AND ZERO IS BLACK. MAybe acomplishable with a fraction with preset numerator??? Set numer = a(z)
+let denom be a(z), but raise a(z) to negative power st @ infinity, div by 0, at 0, div by infinity.
+'''
+
 ################## This. This needs to be translated into a procedure that Output can use to mirror the file itself.
         ########## Now that I've switched to streaming the fractal to file.
 # def symmetry(rawIn, julia, yNow, yFinal, x):
