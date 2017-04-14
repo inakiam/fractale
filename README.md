@@ -39,6 +39,9 @@ so we have to renormalise that and pick values of tranforms that behave as desir
 * GPU Support
 * * Probably only CUDA at first.
 * Rudimentary GUI.
+* Finish writing colourspace.py class for HSL-HSV-RGB-WHATEVER colour conversions.
+* rewrite fractale.py architecture to be less pants-on-head stupid
+
 
 
 # Documentation
@@ -206,14 +209,11 @@ addTerm("0") = Add a term to the top level.
 addTerm("0.") = Add a subterm to term 0.
 addterm("1.3.") = Add a subterm to subterm 3 of term 1.
 
+# The .mfield File Format
+It's a giant, ugly, uncompressed raw list for now. Sorry.
+
+ef that, make it a binary file at least...
 
 
 ## License
 License is WTFPL 2.0, because really, who would?
-
-
-## TODO
-* rewrite rendering architecture so that z is a vector of all of z's states thus allowing more colouring algos + 
-implicit storage of c as z[0]
-* create colourspace.py class for HSL-HSV-RGB-WHATEVER colour conversions.
-* rewrite fractale.py architecture to be less pants-on-head stupid
