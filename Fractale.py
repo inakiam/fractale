@@ -175,14 +175,9 @@ def superset(j, x, y, itr, sSym=False):
 
 class Fractale(Graph):
 
-    #Polymorphic Storage Vars; because I'm lazy.
-    eqs = 1
-
-
     #Default values
     ##Mandel/Julia Switch
     baseSetMandel = True
-    superSetJulia = not(baseSetMandel)
 
     ##Iteration Depth
     itr = 80
@@ -193,15 +188,22 @@ class Fractale(Graph):
     zBase = 0j
     cBase = 0j
 
+    ##Coordinate Transform
+    transform = lambda c: c
+
     ##Fractal set id
-    fSet = 0
+    Eqs = Formulas(transform)
+    ##power of set
+    power = 2
+
+
 
     ##Image Resolution
     resX = 100
     resY = 100
 
     ##Point Generation Algorithm
-    algo = 0
+    algo = 1
     # 0 = Graph
     # 1 = Roots
     ##Rendering Method.
@@ -210,23 +212,23 @@ class Fractale(Graph):
     def __init__(self,base=True,antecedent = None):
 
         #Setup Graph...
-        Graph.__init__()
-        Graph.(resX=self.resX, resY=self.resY, epicentre=[-.75, 0], magnitude=0)
+        self.Plane = Graph()
+        self.Plane.updateMulti(resX=self.resX, resY=self.resY, epicentre=[-.75, 0], magnitude=0)
 
 
         #Inconstants
         if base:
             #create things not necessary in recursive calculators
-            self.superCalc = Fractale(base = False,self)
+            self.superCalc = Fractale(False,self)
 
             #file output
             self.out = PPX()
-            self.out.setMost(3,1,resX,resY,'Fractale [' +str(tBaseN(randint(1,4000))) + ']')
+            self.out.setMost(3,1,self.resX,self.resY,'Fractale [' +str(tBaseN(randint(1,4000))) + ']')
 
             #Colouring not required by recursive class...
             self.Colour = Colouring()
-            self.cIn = self.Colour.cPic(5)
-            self.cOut = self.Colour.cPic(4)
+            self.cIn = self.Colour.cPic(0)
+            self.cOut = self.Colour.cPic(3)
 
             #Output var to be used if the dataset is being saved for later processing...
             self.rOut = []
@@ -234,9 +236,12 @@ class Fractale(Graph):
             #Give supercalc access to Parent
             self.Parent = antecedent
 
+            #What type of thing is superset pixels?
+            self.baseSetMandel = not(self.Parent.baseSetMandel)
+
             #autoconfigure sSet render with some defaults...
             self.algo = self.Parent.algo
-            self.rMode = min(rMode, 1)
+            self.rMode = min(self.algo, 1)
             self.resX = 10
             self.resY = 10
 
@@ -249,9 +254,11 @@ class Fractale(Graph):
 
         out = []
 
-        triangle = round(.5 * (1 + (8 * (self.resX * self.resY) + 1) ** .5))
+        #There are n nth roots, thus a sum of root is the n sumorial.
+        #Find closest sumorial number jpixelres
+        sumorial = round(.5 * (1 + (8 * (self.resX * self.resY) + 1) ** .5))
 
-        for i in range(1, triangle + 1):
+        for i in range(1, sumorial + 1):
             out += allComplexRoots(c, i)
 
         return out
@@ -288,58 +295,69 @@ class Fractale(Graph):
 
         if self.rMode == 0:
 
-            for y in range(resY):
+            for y in range(self.resY):
 
                 curLine = []
 
-                for x in range(resX):
+                for x in range(self.resX):
 
-                    c = complex(Graph.posX, Graph.posY) + cBase
-                    z = zBase
+                    c = complex(self.Plane.posX, self.Plane.posY)
+                    z = self.zBase
 
-                    z = fSet(z, c, pwr, itr, limit, julia, transform)
+                    z = self.Eqs.fSet(self.baseSetMandel,z,c,self.power,self.itr,self.limit)
 
                     escTime = len(z) - 1
 
-                    if not raw:
-                        if escTime == itr:
-                            curLine += self.cIn(z, escTime, itr, c)
+                    if self.algo == 0:
+                        if escTime == self.itr:
+                            curLine += self.cIn(z, escTime, self.itr, c)
                         else:
-                            curLine += self.cOut(z, escTime, itr, c)
-                    else:
-                        if escTime == itr:
-                            output[0] += [[z[-1], escTime]]
+                            curLine += self.cOut(z, escTime, self.itr, c)
+                    elif self.algo == 1:
+                        if escTime == self.itr:
+                            self.output[0] += [[z[-1], escTime]]
                         else:
-                            output[1] += [[z[-1], escTime]]
+                            self.output[1] += [[z[-1], escTime]]
+                    else: self.rOut += [z]
 
-                    Graph.posX += Graph.fsX
+                    self.Plane.posX += self.Plane.fsX
 
-                Graph.posX = Graph.reset[0]
-                Graph.posY += Graph.fsY
+                self.Plane.posX = self.Plane.reset[0]
+                self.Plane.posY += self.Plane.fsY
 
                 if self.algo == 0:
-                    out.write(curLine)
+                    self.out.write(curLine)
                     curLine = []
+
             #Return Values for graph renders...
             if self.algo == 1:
-                return rOut
-            elif:
+                return self.output
+            elif self.algo == 3:
+                return self.rOut
+            else:
                 return -1
 
-        elif self.rMode == 1 and not(self.Base): # this rendermode makes no sense for base sets
+             #algo == 1
+        elif self.rMode == 1 and not(self.baseSetMandel): # this rendermode makes no sense for base sets
 
             pointCloud = self.__genCloud__(self.c)
 
             for c in pointCloud:
 
-                eqs.escTime(self.julia,z,c,self.power,self.itr,self.limit,self.transform)
+                z = self.fSet(self.baseSetMandel,z,c,self.power,self.itr,self.limit)
+                escTime = len(z) - 1
 
-                pass
+                if escTime == self.itr:
+                    self.output[0] += [[z[-1], escTime]]
+                else:
+                    self.output[1] += [[z[-1], escTime]]
 
-            return
+
+            return self.ouput
 
 
 
 #run(100,100,0,True)
 #superset(10, 100, 100, 40)
-#Fractale()
+f = Fractale()
+f.render()

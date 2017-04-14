@@ -102,6 +102,8 @@ class Colouring(object):
 
         z = z[-1] #only use last z.
 
+        if abs(z) == 0: z = -1
+
         c = (z/abs(z))*.255 - 1
         z = [0]
         zenith = 1
