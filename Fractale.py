@@ -215,6 +215,7 @@ class Fractale(Graph):
         self.Plane = Graph()
         self.Plane.updateMulti(resX=self.resX, resY=self.resY, epicentre=[-.75, 0], magnitude=0)
 
+        self.base = base
 
         #Inconstants
         if base:
@@ -301,10 +302,15 @@ class Fractale(Graph):
 
                 for x in range(self.resX):
 
-                    c = complex(self.Plane.posX, self.Plane.posY)
+                    c = complex(self.Plane.posX, self.Plane.posY) + self.cBase
                     z = self.zBase
 
-                    z = self.Eqs.fSet(self.baseSetMandel,z,c,self.power,self.itr,self.limit)
+                    if algo == 0:
+                        z = self.Eqs.fSet(self.baseSetMandel,z,c,self.power,self.itr,self.limit)
+                    else:
+                        self.superCalc.zBase = c
+                        self.superCalc.cBase = z
+                        z = self.superCalc.render()
 
                     escTime = len(z) - 1
 
@@ -338,9 +344,11 @@ class Fractale(Graph):
                 return -1
 
              #algo == 1
-        elif self.rMode == 1 and not(self.baseSetMandel): # this rendermode makes no sense for base sets
 
-            pointCloud = self.__genCloud__(self.c)
+        #Root-Cloud Superset Rendering
+        elif self.rMode == 1 and not(self.base): # this rendermode makes no sense for base sets
+
+            pointCloud = self.__genCloud__(self.zBase)
 
             for c in pointCloud:
 

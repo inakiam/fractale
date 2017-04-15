@@ -209,7 +209,21 @@ addTerm("0") = Add a term to the top level.
 addTerm("0.") = Add a subterm to term 0.
 addterm("1.3.") = Add a subterm to subterm 3 of term 1.
 
-# The .mfield File Format
+# Raw Output
+Because Supersets are largely non-optimisable with traditional techniques, and because I didn't feel like brainstorming
+new and improved algorithms, Fractale supports saving raw output. The benefit of saving raw output as opposed to
+rendering directly is that a raw-output file saves the total results of a calculation prior to colouring.
+
+*Colouring is the least expensive step in terms of compute time.* Thus, by saving the results of one calculation to raw
+output, you can rapidly try as many different colouring methods as you like one the file; without having to wait.
+Furthermore, if Fractale is ever updated with new features, then you can use the raw output with those new features.
+Every effort has been taken to ensure that Fractale's raw output represents a complete record of all data calculation
+produces.
+
+Finally, though not availile now, an eventual feature is planned for raw output such that you can use a raw output file
+to bootstrap a larger render in the same numerical range as the previous file, saving compute time.
+
+## The .mfield File Format
 It's a giant, ugly, uncompressed raw list for now. Sorry.
 
 ef that, make it a binary file at least...
