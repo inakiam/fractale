@@ -1,5 +1,6 @@
-class PPX(object):
+from datetime import datetime
 
+class PPX(object):
 
     header = 3
     mode = True
@@ -8,6 +9,7 @@ class PPX(object):
     height = 50
     comment='Godiva. Fractal. Popcorn.'
     fname="Output"
+    timestamp = str(datetime.now()).replace(":",".")
     depth=8
     ext = ".pbm.pgm.ppm"
 
@@ -24,7 +26,7 @@ class PPX(object):
 
         if self.mode: #binary PPMs
 
-            self.file = open(self.fname+self.ext[(self.header-1)*4:
+            self.file = open(self.timestamp+" "+self.fname+self.ext[(self.header-1)*4:
                                                  self.header*4],'wb')
 
             self.file.write(bytearray(ppmHeader,'UTF-8'))
@@ -36,6 +38,10 @@ class PPX(object):
 
             self.file.write(ppmHeader)
 
+    def setSize(self,dpi,w,h):
+        '''figure out minimum size in pixels to achieve dpi wanted
+        w and h are ASPECT RATIOS.'''
+        pass#make this call setMost with width/height equal to  whatever is necessary to satisfy dia reqs
 
     def setMost(self,header,mode,width,height,fname):
 

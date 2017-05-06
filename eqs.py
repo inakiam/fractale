@@ -1,15 +1,41 @@
 #Factal Eqs
+import cmath
 
-class Formulas(object):
+class Formula(object):
 
+    #Preloaded Formulas
+    eqs = [
+           lambda z,c,pwr: z[-1] ** pwr + c,                                              #mandel
+           lambda z,c,pwr: z[-1].conjugate() ** pwr + c,                                  #mbar
+           lambda z,c,pwr: (abs(z[-1].real)+abs(z[-1].imag)*j) ** pwr + c,                 #bShip,
+           lambda z,c,pwr: (z[-1] * z[-2] * c) ** pwr + c,                                #sakura,
+           lambda z,c,pwr: cmath.sin(z[-1]) ** pwr + c,                                   #sin,
+           lambda z,c,pwr: 1/cmath.cos(z[-1]) ** pwr + c,                                 #sec,
+           lambda z,c,pwr: cmath.tan(z[-1]) ** pwr + c,                                   #tan,
+           lambda z,c,pwr: cmath.sinh(z[-1]) ** pwr + c,                                  #sinh,
+           lambda z,c,pwr: cmath.cosh(z[-1]) ** pwr + c,                                  #sech,
+           lambda z,c,pwr: cmath.tanh(z[-1]) ** pwr + c,                                  #tanh,
+           lambda z,c,pwr: complex(z[-1].real, abs(z[-1].imag)) ** pwr + c,               #duck,
+           lambda z,c,pwr: (c / z[-1]) - z[-1] ** pwr + c,                                #apollyon
+           lambda z,c,pwr: z[-1] - 1* (z[-1] ** pwr - 1)/(pwr * z[-1] ** (pwr - 1)) + c, #nova
+           lambda z, c, pwr: (complex(abs(z[-1].real), abs(z[-1].imag))                   #bSaku
+                              * complex(abs(c.real), abs(c.imag))
+                              * complex(abs(z[-2].real), abs(z[-2].imag))) ** pwr + c
+           ]
 
+    formula = 0
 
-    def __init__(self,transform):
-        self.eqs = [self.mandelbrot]
-        self.fSet = self.eqs[0]
+    def __init__(self,transform=lambda c: c):
         self.transform = staticmethod(transform)
 
-    def mandelbrot(self,mSet,z,c,pwr,itr,limit):
+    def setFormula(self,f): self.formula = f
+
+    def addCustomFormula(self,custom,name):
+        #Security Aneurysm Here
+        self.eqs += [eval("lambda z,c,p: "+custom)]
+        pass
+
+    def read(self,mSet,z,c,pwr,itr,limit):
 
         '''Generic Fractal ETA.'''
         if not(mSet): z,c = c,z
@@ -22,7 +48,7 @@ class Formulas(object):
         except ZeroDivisionError:
             return z # Not like it was going anywhere...
 
-        #LETS NOT DIVIDE BY ZERO
+        #NO, REALLY, LETS NOT DIVIDE BY ZERO
         if c == complex(0,0) and pwr < 0: return z
 
         if pwr < 0:
@@ -33,51 +59,15 @@ class Formulas(object):
 
             i += 1
 
-            z += [z[-1] ** pwr + c]
+            z += [self.eqs[self.formula](z,c,pwr)]
             zenith = z[-1]
 
         return z #Return coordinate vector of all zs
 
-# #saku preloop
-# p = z
-# #saku loop
-# zl = z
-# z = (z*p*c) ** pwr + c
-# p = zl
-#
-#
-#
-# #mBar
-# z = z.conjugate() ** pwr + c
-#
-# #bShipppppp
-# z = (abs(z.real)+abs(z.imag)*j) ** pwr + c
-#
-#
-# #bSaku preloop
-# p = z
-# #bSaku Loop
-# zl = z
-#
-# z = (complex(abs(z.real),abs(z.imag))
-#      *complex(abs(c.real),abs(c.imag))
-#      *complex(abs(p.real),abs(p.imag))) ** pwr + c
-#
-# p = zl
-#
-#
-#
-#
-# #sinBrot. limit should be multiplied by 3 for better deets
-# z = cmath.sin(z) ** pwr + c
-#
-#
-#
-#
-# #duck
-# z = complex(z.real,abs(z.imag)) ** pwr + c
-#
-#
+
+
+#This is a fractal formula not currently supported! Don't delete, because
+#this points out a flaw in current architecture
 #
 # #kel
 # if i%2== 0: z = z ** pwr + c
@@ -85,15 +75,3 @@ class Formulas(object):
 #
 #     if i % 3 == 0: z = z ** pwr / c
 #     else: z = z ** pwr - c
-#
-#
-#
-#
-# #apollyon
-# z = (c/z) - z ** pwr + c
-#
-
-
-    
-
-#,sakura,mBar,bShip,bSaku,sinBrot,duck,apollyon,kel]

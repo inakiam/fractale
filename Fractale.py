@@ -3,9 +3,10 @@ from cmath import *
 from colouring import Colouring
 from graph import Graph
 from output import PPX
+from eqs import Formula
 # Custom Functions
-from eqs import *
 from cTools import *
+
 
 
 # Builtin Functions
@@ -17,6 +18,7 @@ from cTools import *
 plane = Graph()
 field = Graph()
 colour = Colouring()
+formula = Formula()
 
 
 #### Begin Program Proper ###
@@ -33,7 +35,7 @@ logarithms. Or what-have-you.'''
 # Main calculation function
 # Run the colouring algo before using symmetry. Fucking seriously. It's faster.
 
-def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, transform, raw):
+def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, raw):
     '''ETA Fractal Calculator.
     fSet defines formulas; see function ePic for details.
     pwr defines the exponet of the formula
@@ -66,7 +68,7 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, transform
         out.setMost(3, 1, resX, resY, 'Output' + str(n))
 
     # Assign function to be called
-    fSet = eqs[fSet]
+    formula.setFormula(fSet)
 
     # Iterate over the space.
     for y in range(resY):
@@ -76,7 +78,7 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, transform
             c = complex(plane.posX, plane.posY) + cBase
             z = zBase
 
-            z = fSet(z, c, pwr, itr, limit, julia, transform)
+            z = formula.read(julia, z, c, pwr, itr, limit)
 
             escTime = len(z) - 1
 
@@ -115,7 +117,7 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, transform
 # Rendering Modes
 
 def run(x, y, fSet, j):
-    calculate(fSet, 2, 80, j, (.1 + .2j), (0 + 0j), False, x, y, " Raw ", lambda c: c, False)
+    calculate(fSet, 2, 80, j, (.1 + .2j), (0 + 0j), False, x, y, " Raw ", False)
     print("Render Complete.")
 
 
@@ -140,25 +142,27 @@ def superset(j, x, y, itr, sSym=False):
 
     color = Colouring()
     formSet = 0
-    mSet = True
+    mSet = False
     curLine = []
     outp = PPX()
-    outp.setMost(3, 1, x, y, 'SupeeeqwerOutput')
+    outp.setMost(3, 1, x, y, 'SuperOutput')
     color.updateMulti(pal=0)
-    cOut = color.cPic(1)
+    cOut = color.cPic(3)
     cIn = [0, 0, 0]
 
     for rows in range(y):
 
         for points in range(x):
             zIn,zOut = calculate(formSet, 2, itr, mSet, complex(field.posX, field.posY)
-                          , complex(cX, cY), False, j, j, "", lambda c: c, True)
+                          , complex(cX, cY), False, j, j, "", True)
 
 
             escAvg = sum([i[1] for i in zOut]) / j ** 2
+            zAvg = sum([i[0] for i in zOut]) \
+                   / j**2
             
 
-            curLine += cOut(0, escAvg, 0, 0)
+            curLine += cOut([zAvg], complex(escAvg), 0, 0)
 
             field.posX += field.fsX
 
@@ -192,7 +196,7 @@ class Fractale(Graph):
     transform = lambda c: c
 
     ##Fractal set id
-    Eqs = Formulas(transform)
+    Eqs = formulas(transform)
     ##power of set
     power = 2
 
@@ -215,7 +219,6 @@ class Fractale(Graph):
         self.Plane = Graph()
         self.Plane.updateMulti(resX=self.resX, resY=self.resY, epicentre=[-.75, 0], magnitude=0)
 
-        self.base = base
 
         #Inconstants
         if base:
@@ -302,15 +305,10 @@ class Fractale(Graph):
 
                 for x in range(self.resX):
 
-                    c = complex(self.Plane.posX, self.Plane.posY) + self.cBase
+                    c = complex(self.Plane.posX, self.Plane.posY)
                     z = self.zBase
 
-                    if algo == 0:
-                        z = self.Eqs.fSet(self.baseSetMandel,z,c,self.power,self.itr,self.limit)
-                    else:
-                        self.superCalc.zBase = c
-                        self.superCalc.cBase = z
-                        z = self.superCalc.render()
+                    z = self.Eqs.read(self.baseSetMandel,z,c,self.power,self.itr,self.limit)
 
                     escTime = len(z) - 1
 
@@ -344,15 +342,13 @@ class Fractale(Graph):
                 return -1
 
              #algo == 1
+        elif self.rMode == 1 and not(self.baseSetMandel): # this rendermode makes no sense for base sets
 
-        #Root-Cloud Superset Rendering
-        elif self.rMode == 1 and not(self.base): # this rendermode makes no sense for base sets
-
-            pointCloud = self.__genCloud__(self.zBase)
+            pointCloud = self.__genCloud__(self.c)
 
             for c in pointCloud:
 
-                z = self.fSet(self.baseSetMandel,z,c,self.power,self.itr,self.limit)
+                z = self.Eqs.read(self.baseSetMandel,z,c,self.power,self.itr,self.limit)
                 escTime = len(z) - 1
 
                 if escTime == self.itr:
@@ -361,11 +357,11 @@ class Fractale(Graph):
                     self.output[1] += [[z[-1], escTime]]
 
 
-            return self.ouput
+            return self.output
 
 
 
 #run(100,100,0,True)
 #superset(10, 100, 100, 40)
-f = Fractale()
-f.render()
+#f = Fractale()
+#f.render()
