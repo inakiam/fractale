@@ -67,7 +67,10 @@ class Colouring(object):
 
         if type(escTime) is int:
             return self.pallet[escTime%(len(self.pallet))]
-        else: return self.interpolate(escTime)
+        else:
+            if escTime is complex:
+                escTime = float(escTime.real)
+            return self.interpolate(escTime)
 
     def etaSm(self, z, escTime, itr,c):
         z = z[-1]
@@ -84,8 +87,8 @@ class Colouring(object):
 
         z = z[-1] #This algorithm only uses the last iteration of z.
 
-        z = (cmath.log( cmath.log(z) /
-                                            cmath.log(2) ) / cmath.log(2))
+        #z = (cmath.log( cmath.log(z) /
+                                            #cmath.log(2) ) / cmath.log(2))
         r = abs(z.real)
         g = abs(z.imag)
         b = abs(z)

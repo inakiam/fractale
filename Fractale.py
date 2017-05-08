@@ -1,4 +1,5 @@
 from cmath import *
+import cmath
 ##Custom Classes
 from colouring import Colouring
 from graph import Graph
@@ -80,15 +81,16 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, raw):
 
             z = formula.read(julia, z, c, pwr, itr, limit)
 
-            escTime = len(z) - 1
+            escTime = abs(len(z) - (cmath.log( cmath.log(abs(z[-1])) /
+                                            cmath.log(2) ) / cmath.log(2)))
 
             if not raw:
-                if escTime == itr:
+                if escTime > itr - 1:
                     curLine += cinter(z, escTime, itr, c)
                 else:
                     curLine += couter(z, escTime, itr, c)
             else:
-                if escTime == itr:
+                if escTime > itr - 1:
                     output[0] += [[z[-1], escTime]]
                 else:
                     output[1] += [[z[-1],escTime]]
@@ -144,10 +146,11 @@ def superset(j, x, y, itr, sSym=False):
     formSet = 0
     mSet = False
     curLine = []
-    outp = PPX()
-    outp.setMost(3, 1, x, y, 'SuperOutput')
+    outp = [PPX(),PPX()]
+    outp[0].setMost(3, 1, x, y, 'InnerSset')
+    outp[0].setMost(3, 1, x, y, 'OuterSset')
     color.updateMulti(pal=0)
-    cOut = color.cPic(3)
+    cOut = color.cPic(1)
     cIn = [0, 0, 0]
 
     for rows in range(y):
@@ -157,25 +160,31 @@ def superset(j, x, y, itr, sSym=False):
                           , complex(cX, cY), False, j, j, "", True)
 
 
-            escAvg = sum([i[1] for i in zOut]) / j ** 2
-            zAvg = sum([i[0] for i in zOut]) \
+            escAvg = sum([i[1] for i in zIn] + [i[1] for i in zOut]) / j ** 2
+            zAvg = sum([i[0] for i in zIn]+ [i[1] for i in zOut]) \
                    / j**2
             
 
-            curLine += cOut([zAvg], complex(escAvg), 0, 0)
+            curLine += cOut([zAvg], escAvg, itr, 0)
 
             field.posX += field.fsX
 
         # Satisfy idle curiosity
         if rows % 15 == 1: print('Render is', str(round((rows / y) * (2 if sSym else 1)
                                                         * 100, 3)) + '% done.')
-        outp.write(curLine)
+        outp[0].write(curLine)
         field.posY += field.fsY
         field.posX = field.reset[0]
 
         curLine = []
 
     print("Render complete.")
+
+superset(10,12000,12000,80)
+
+def namer(self):
+
+    pass#return self.Eqs.name + self.cBase +
 
 class Fractale(Graph):
 

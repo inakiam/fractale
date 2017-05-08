@@ -22,6 +22,22 @@ class Formula(object):
                               * complex(abs(c.real), abs(c.imag))
                               * complex(abs(z[-2].real), abs(z[-2].imag))) ** pwr + c
            ]
+    eNames = [
+           "Mandelbrot",
+           "Mandelbar",
+           "Burning Ship",
+           "Sakura",
+           "Sinebrot",
+           "Mandelsec",
+           "Tanbrot",
+           "Hyperbolic Sinebrot",
+           "Hyperbolic Mandelsec",
+           "Hyperbolic Tanbrot",
+           "Duck Fractal",
+           "Apollyon",
+           "Broken Nova",
+           "Burning Blossom"
+           ]
 
     formula = 0
 
