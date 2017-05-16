@@ -7,7 +7,7 @@ class Formula(object):
     eqs = [
            lambda z,c,pwr: z[-1] ** pwr + c,                                              #mandel
            lambda z,c,pwr: z[-1].conjugate() ** pwr + c,                                  #mbar
-           lambda z,c,pwr: (abs(z[-1].real)+abs(z[-1].imag)*j) ** pwr + c,                 #bShip,
+           lambda z,c,pwr: complex(abs(z[-1].real),abs(z[-1].imag)) ** pwr + c,           #bShip,
            lambda z,c,pwr: (z[-1] * z[-2] * c) ** pwr + c,                                #sakura,
            lambda z,c,pwr: cmath.sin(z[-1]) ** pwr + c,                                   #sin,
            lambda z,c,pwr: 1/cmath.cos(z[-1]) ** pwr + c,                                 #sec,
@@ -17,10 +17,11 @@ class Formula(object):
            lambda z,c,pwr: cmath.tanh(z[-1]) ** pwr + c,                                  #tanh,
            lambda z,c,pwr: complex(z[-1].real, abs(z[-1].imag)) ** pwr + c,               #duck,
            lambda z,c,pwr: (c / z[-1]) - z[-1] ** pwr + c,                                #apollyon
-           lambda z,c,pwr: z[-1] - 1* (z[-1] ** pwr - 1)/(pwr * z[-1] ** (pwr - 1)) + c, #nova
+           lambda z,c,pwr: z[-1] - 1* (z[-1] ** pwr - 1)/(pwr * z[-1] ** (pwr - 1)) + c,  #nova
            lambda z, c, pwr: (complex(abs(z[-1].real), abs(z[-1].imag))                   #bSaku
                               * complex(abs(c.real), abs(c.imag))
-                              * complex(abs(z[-2].real), abs(z[-2].imag))) ** pwr + c
+                              * complex(abs(z[-2].real), abs(z[-2].imag))) ** pwr + c,
+           lambda z,c,pwr: cmath.log([z[-1],z[-1].conjugate()][z[-1].imag < 0] + c)               #other duck
            ]
     eNames = [
            "Mandelbrot",

@@ -56,12 +56,12 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, raw):
 
     # Set up the graph for rendering.
     plane.updateRes(resX, resY)
-    plane.updateMulti(epicentre=[0, 0], magnitude=1)
+    plane.updateMulti(epicentre=[-.750, 0], magnitude=0)
 
     # Set up colouring algorithm for colouring.
     colour.updateMulti(pal=3)
-    cinter = colour.cPic(5)
-    couter = colour.cPic(4)
+    cinter = colour.cPic(1)
+    couter = colour.cPic(1)
 
     # Set up output container.
     if not raw:
@@ -119,7 +119,7 @@ def calculate(fSet, pwr, itr, julia, zBase, cBase, opt, resX, resY, n, raw):
 # Rendering Modes
 
 def run(x, y, fSet, j):
-    calculate(fSet, 2, 80, j, (.1 + .2j), (0 + 0j), False, x, y, " Raw ", False)
+    calculate(fSet, 2, 80, j, 0j, (0 + 0j), False, x, y, " Raw ", False)
     print("Render Complete.")
 
 
@@ -135,7 +135,8 @@ def superset(j, x, y, itr, sSym=False):
     ----odd-n rotal symmetry cannot be rendered properly.
     '''
 
-    field.updateMulti(resX=x, resY=y, epicentre=[-.75, 0], magnitude=0)
+    field.updateMulti(resX=x, resY=y, epicentre=[-.399290869763, .397444664205]
+                      , magnitude=0)
 
     # Julia Coords for inverse supersets.
     cX, cY = 0, 0  # -.783091,-.149219#.296906,.502234
@@ -143,7 +144,7 @@ def superset(j, x, y, itr, sSym=False):
     final = []
 
     color = Colouring()
-    formSet = 0
+    formSet = 2
     mSet = False
     curLine = []
     outp = [PPX(),PPX()]
@@ -180,7 +181,7 @@ def superset(j, x, y, itr, sSym=False):
 
     print("Render complete.")
 
-superset(10,12000,12000,80)
+#superset(10,12000,12000,80)
 
 def namer(self):
 
