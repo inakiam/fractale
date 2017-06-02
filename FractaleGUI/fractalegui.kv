@@ -1,3 +1,31 @@
+#:import wbr webbrowser
+
+
+#Popup giving acknolwedgements and suchlike.
+<About>:
+	size_hint: .3,.3
+	id: about
+	title: "About Fractale"
+	auto_dissmiss: True
+	BoxLayout:
+		Label:
+			text: "Fractale - A Fractal Fractal Renderer Renderer"
+
+#Progress bar for renders.
+#To be replaced by live-updating pic. Eventually.			
+<Progress>:
+	size_hint: .95,.1
+	pos_hint:
+	title: "Rendering in Progress!"
+	auto_dismiss: False
+	ProgressBar:
+	
+#Superset settings panel
+<SuperSettings>:
+	size_hint: .6,.9
+	
+	
+#The actual layout.
 <NestedFloatLayout>:
 	orientation:'vertical'
 
@@ -58,7 +86,17 @@
 					ActionButton:
 						text: "Set Bailout"
 						on_release: pass
-		
+					
+				ActionGroup:
+					text: 'Help'
+					mode:'spinner'
+					ActionButton:
+						text: 'Docs'
+						on_release: wbr.open("https://github.com/inakiam/fractale/blob/master/README.md")
+					ActionButton:
+						text: 'About'
+						on_release: root.aboutP()
+	
 	
 		BoxLayout:
 			size_hint: 1, 1-aBar.height/root.height
@@ -85,9 +123,10 @@
 									id: zd
 									max: 28
 									min: -4
-									value: 0
+									value: 0 if ti.text == None else (float(ti.text) if self.min <= float(ti.text) <= self.max else (self.min if float(ti.text) < self.max else self.max))
 									
 								TextInput:
+									id:ti
 									text: str(round(zd.value,2))
 									multiline: False
 						BoxLayout:
@@ -99,9 +138,10 @@
 									id: rc
 									max: 10
 									min: -10
-									value: 0
+									value: 0 if tn.text is None else (float(tn.text) if self.min <= float(tn.text) <= self.max else (self.min if float(tn.text) < self.max else self.max))
 									
 								TextInput:
+									id: tn
 									text: str(round(rc.value,2))
 									multiline: False
 						BoxLayout:
@@ -113,9 +153,10 @@
 									id: ic
 									max: 10
 									min: -10
-									value: 0
+									value: 0 if tl.text is None else (float(tl.text) if self.min <= float(tl.text) <= self.max else (self.min if float(tl.text) < self.max else self.max))
 									
 								TextInput:
+									id:tl
 									text: str(round(ic.value,2))
 									multiline: False
 						BoxLayout:
@@ -127,9 +168,10 @@
 									id: mor
 									max: 20000
 									min: 0
-									value: 4
+									value: 4 if ti.text is None else (float(th.text) if self.min <= float(th.text) <= self.max else (self.min if float(th.text) < self.max else self.max))
 									
 								TextInput:
+									id: th
 									text: str(round(mor.value,2))
 									multiline: False
 						BoxLayout:
@@ -141,24 +183,26 @@
 									id: mi
 									max: 500
 									min: 0
-									value: 80
+									value: 80 if tk.text is None else (float(tk.text) if self.min <= float(tk.text) <= self.max else (self.min if float(tk.text) < self.max else self.max))
 									
 								TextInput:
+									id: tk
 									text: str(round(mi.value,2))
 									multiline: False
 									
 						BoxLayout:
+							id: cboxs
 							Label:
 								text: "Julia Set?"
 							CheckBox:
 							Label:
 								text: "Superset?"
 							CheckBox:
+								id: ssetCheck
 						
 						
 						Button:
 							text: 'Render'
+							on_release: print('hi') if ssetCheck.active else root.progBar()
 						
 			TextInput:
-			
-			
