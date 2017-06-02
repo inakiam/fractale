@@ -3,8 +3,8 @@
 
 	FloatLayout:
 		ActionBar:
-			id: 'aBar'
 			pos_hint: {"top":1}
+			id: aBar
 			
 			
 			ActionView:
@@ -20,7 +20,10 @@
 						text: "New"
 						on_release: pass
 					ActionButton:
-						text: "Save"
+						text: "Save Image"
+						on_release: pass
+					ActionButton: 
+						text: "Save Basic Parameters"
 						on_release: pass
 					ActionButton:
 						text: "Open"
@@ -57,22 +60,105 @@
 						on_release: pass
 		
 	
-	FloatLayout:
-		size_hint: 1,1
-		
-		
-		Splitter:
-			sizeable_from: "left"
-			BoxLayout:
-				orientation: 'vertical'
-				
-				FloatLayout:
-					
+		BoxLayout:
+			size_hint: 1, 1-aBar.height/root.height
 			
+			
+			
+			Splitter:
+				sizable_from: 'right'
+				min_size:.1 * root.width
+				max_size:.3 * root.width
+			
+				
 				BoxLayout:
 					orientation: 'vertical'
-					Slider:
-					Slider:
-					Slider:
-					Slider:	
-					Button:
+					
+					BoxLayout:
+						orientation: 'vertical'
+						BoxLayout:
+							orientation: 'vertical'
+							Label:
+								text: 'Zoom Depth'
+							BoxLayout:
+								Slider:
+									id: zd
+									max: 28
+									min: -4
+									value: 0
+									
+								TextInput:
+									text: str(round(zd.value,2))
+									multiline: False
+						BoxLayout:
+							orientation: 'vertical'
+							Label:
+								text: 'Real Centre'
+							BoxLayout:
+								Slider:
+									id: rc
+									max: 10
+									min: -10
+									value: 0
+									
+								TextInput:
+									text: str(round(rc.value,2))
+									multiline: False
+						BoxLayout:
+							orientation: 'vertical'
+							Label:
+								text: 'Imaginary Centre'
+							BoxLayout:
+								Slider:
+									id: ic
+									max: 10
+									min: -10
+									value: 0
+									
+								TextInput:
+									text: str(round(ic.value,2))
+									multiline: False
+						BoxLayout:
+							orientation: 'vertical'
+							Label:
+								text: 'Max Orbit Radius'
+							BoxLayout:
+								Slider:
+									id: mor
+									max: 20000
+									min: 0
+									value: 4
+									
+								TextInput:
+									text: str(round(mor.value,2))
+									multiline: False
+						BoxLayout:
+							orientation: 'vertical'
+							Label:
+								text: 'Max Iterations'
+							BoxLayout:
+								Slider:
+									id: mi
+									max: 500
+									min: 0
+									value: 80
+									
+								TextInput:
+									text: str(round(mi.value,2))
+									multiline: False
+									
+						BoxLayout:
+							Label:
+								text: "Julia Set?"
+							CheckBox:
+							Label:
+								text: "Superset?"
+							CheckBox:
+						
+						
+						Button:
+							text: 'Render'
+						
+			TextInput:
+			
+			
