@@ -45,6 +45,38 @@ class Formula(object):
     def __init__(self,transform=lambda c: c):
         self.transform = staticmethod(transform)
 
+    def __saferEval__(self,s):
+        '''Given a string s, checks to make sure it's composed of permitted substrings prior
+        to eval.'''
+
+        functions = ["sin","cos","tan","sih","coh","tah","exp","log","asin","acos","atan","phase",
+                     "asih","acoh","atah","mean","gmean","hmean","conjugate","abs","fabs","rabs",
+                     "iabs","sum","prod","rootx"]
+
+        variables = ["z","c"]
+
+        punctuation = ["+","-","/","*","^"," ","(",")"]
+
+        funct = s
+
+        def sad(arr,s):
+
+            for items in arr:
+                while s.find(items) != -1:
+                    s = s[:s.find(items)] + s[s.find(items) + len(items):]
+
+            return s
+
+        s = sad(functions,s)
+        s = sad(variables,s)
+        s = sad(punctuation,s)
+
+        if len(s) == 0: return eval("lambda z,c,pwr:" + funct)
+        else:
+            print("You're doing something stupid, aren't you?")
+            print("Forbidden: ","s")
+
+
     def setFormula(self,f): self.formula = f
 
     def addCustomFormula(self,custom,name):

@@ -1,0 +1,78 @@
+<NestedFloatLayout>:
+	orientation:'vertical'
+
+	FloatLayout:
+		ActionBar:
+			id: 'aBar'
+			pos_hint: {"top":1}
+			
+			
+			ActionView:
+			
+				use_separator: True
+				ActionPrevious:
+				
+				
+				ActionGroup:
+					text:'File'
+					mode:'spinner'
+					ActionButton:
+						text: "New"
+						on_release: pass
+					ActionButton:
+						text: "Save"
+						on_release: pass
+					ActionButton:
+						text: "Open"
+						on_release: pass
+					ActionButton:
+						text: "Exit"
+						on_release: pass
+						
+				ActionGroup:
+					text:'Edit'
+					mode:'spinner'
+					ActionButton:
+						text: "Undo"
+						on_release: pass
+					ActionButton:
+						text: "Redo"
+						on_release: pass
+
+						
+				ActionGroup:
+					text:'Fractal'
+					mode:'spinner'
+					ActionButton:
+						text: "Set Formula"
+						on_release: pass
+					ActionButton:
+						text: "Set Plane Transform"
+						on_release: pass
+					ActionButton:
+						text: "Set Maxiter"
+						on_release: pass
+					ActionButton:
+						text: "Set Bailout"
+						on_release: pass
+		
+	
+	FloatLayout:
+		size_hint: 1,1
+		
+		
+		Splitter:
+			sizeable_from: "left"
+			BoxLayout:
+				orientation: 'vertical'
+				
+				FloatLayout:
+					
+			
+				BoxLayout:
+					orientation: 'vertical'
+					Slider:
+					Slider:
+					Slider:
+					Slider:	
+					Button:
